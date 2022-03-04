@@ -2,11 +2,10 @@
 package config
 
 import (
-	"fmt"
-
 	"github.com/spf13/cast"
 	"github.com/spf13/viper"
 
+	"gin-biz-web-api/pkg/console"
 	"gin-biz-web-api/pkg/file"
 	"gin-biz-web-api/pkg/helper"
 )
@@ -42,7 +41,7 @@ func NewConfig(env string, configs ...string) {
 
 			configFile := config + fileName + ".yaml"
 			if _, ok := file.IsExists(configFile); !ok {
-				panic(fmt.Sprintf("%s 配置文件不存在！", configFile))
+				console.Exit("配置文件 [%s] 不存在！", configFile)
 			}
 
 			// 设置配置文件路径为相对路径，相对于 main.go 比如：vp.AddConfigPath("configs/")
