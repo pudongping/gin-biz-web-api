@@ -60,9 +60,9 @@ func NewConfig(env string, configs ...string) {
 
 // fetchConfigFile 根据环境变量加载对应的配置文件
 func fetchConfigFile(env string) string {
-	// 如果没设置环境变量，那么默认使用【本地配置文件】
+	// 如果没设置环境变量，那么默认使用【config/config.yaml 配置文件】
 	if env == "" {
-		return "local_config"
+		return "config"
 	}
 
 	return env + "_config"
