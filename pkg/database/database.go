@@ -18,6 +18,12 @@ func Connect(dbConfig gorm.Dialector, lg gormLogger.Interface) {
 
 	// 使用 gorm.Open 连接数据库
 	var err error
+	// 这里需要注意：不能写成
+	// 	DB, err := gorm.Open(dbConfig, &gorm.Config{
+	//		Logger: lg,
+	//	})
+	// 因为 `:=` 会重新声明并创建了左侧的新局部变量，因此在其他包中调用 database.DB 变量时，它仍然是 nil
+	// 因为根本就没有赋值到包全局变量 database.DB 上
 	DB, err = gorm.Open(dbConfig, &gorm.Config{
 		Logger: lg,
 	})
