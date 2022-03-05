@@ -55,6 +55,7 @@ func (l GormLogger) Error(ctx context.Context, str string, args ...interface{}) 
 }
 
 // Trace 实现 gormLogger.Interface 的 Trace 方法
+// 跟踪打印 sql 信息
 func (l GormLogger) Trace(ctx context.Context, begin time.Time, fc func() (string, int64), err error) {
 
 	// 获取运行时间
@@ -66,7 +67,7 @@ func (l GormLogger) Trace(ctx context.Context, begin time.Time, fc func() (strin
 	logFields := []zap.Field{
 		zap.String("sql", sql),
 		zap.String("time", strx.StrMicroseconds(elapsed)),
-		zap.Int64("rows", rows),
+		zap.Int64("rows", rows), // 受影响的行数
 	}
 
 	// gorm 错误
