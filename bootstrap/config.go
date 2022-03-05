@@ -6,10 +6,13 @@ import (
 	"gin-biz-web-api/config"
 	"gin-biz-web-api/global"
 	pkgConfig "gin-biz-web-api/pkg/config"
+	"gin-biz-web-api/pkg/console"
 )
 
 // setupConfig 初始化配置文件信息
 func setupConfig() {
+
+	console.Info("init config ...")
 
 	// 触发加载 config 包的所有 init 函数
 	config.Initialize()
