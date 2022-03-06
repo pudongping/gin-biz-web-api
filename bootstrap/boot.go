@@ -24,6 +24,9 @@ func init() {
 	// 初始化 redis
 	setupRedis()
 
+	// 初始化缓存 cache
+	setupCache()
+
 }
 
 func Initialize() {
