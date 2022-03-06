@@ -16,10 +16,13 @@ func init() {
 	setupConfig()
 
 	// 初始化日志
-	SetupLogger()
+	setupLogger()
 
 	// 初始化数据库
-	SetupDB()
+	setupDB()
+
+	// 初始化 redis
+	setupRedis()
 
 }
 
