@@ -6,8 +6,8 @@ import (
 	"gin-biz-web-api/pkg/logger"
 )
 
-// SetupLogger 初始化 Logger
-func SetupLogger() {
+// setupLogger 初始化 Logger
+func setupLogger() {
 
 	console.Info("init logger ...")
 
