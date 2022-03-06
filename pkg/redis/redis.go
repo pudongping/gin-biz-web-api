@@ -14,8 +14,8 @@ import (
 	"gin-biz-web-api/pkg/logger"
 )
 
-// rdsClient Redis Client 客户端
-type rdsClient struct {
+// RdsClient Redis Client 客户端
+type RdsClient struct {
 	Client  *redis.Client
 	Context context.Context
 }
@@ -33,10 +33,10 @@ type RdsConfigs map[string]*RdsClientConfig
 var once sync.Once
 
 // rdsCollections 用于保存多个 redis 实例对象的集合
-var rdsCollections map[string]*rdsClient
+var rdsCollections map[string]*RdsClient
 
 // Instance 通过组名得到一个 redis 客户端实例对象
-func Instance(group ...string) *rdsClient {
+func Instance(group ...string) *RdsClient {
 	if len(group) > 0 {
 		if rds, ok := rdsCollections[group[0]]; ok {
 			return rds
@@ -53,7 +53,7 @@ func ConnectRedis(configs RdsConfigs) {
 	once.Do(func() {
 
 		if rdsCollections == nil {
-			rdsCollections = make(map[string]*rdsClient)
+			rdsCollections = make(map[string]*RdsClient)
 		}
 
 		for group, config := range configs {
@@ -70,10 +70,10 @@ func ConnectRedis(configs RdsConfigs) {
 }
 
 // NewClient 创建一个新的 redis 连接
-func NewClient(address, username, password string, db int) *rdsClient {
+func NewClient(address, username, password string, db int) *RdsClient {
 
 	// 初始化自定的 RdsClient 实例
-	rds := &rdsClient{}
+	rds := &RdsClient{}
 	// 使用默认的 context
 	rds.Context = context.Background()
 
@@ -94,7 +94,7 @@ func NewClient(address, username, password string, db int) *rdsClient {
 }
 
 // Ping 用以测试 redis 连接是否正常
-func (r rdsClient) Ping() error {
+func (r RdsClient) Ping() error {
 	_, err := r.Client.Ping(r.Context).Result()
 	return err
 }
