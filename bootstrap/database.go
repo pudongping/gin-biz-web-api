@@ -14,8 +14,8 @@ import (
 	"gin-biz-web-api/pkg/logger"
 )
 
-// SetupDB 初始化数据库和 ORM
-func SetupDB() {
+// setupDB 初始化数据库和 ORM
+func setupDB() {
 
 	console.Info("init database ...")
 
