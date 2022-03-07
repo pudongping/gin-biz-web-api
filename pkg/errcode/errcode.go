@@ -32,7 +32,11 @@ func (e *Error) Code() int {
 }
 
 // Msg 返回错误提示信息
-func (e *Error) Msg(args ...interface{}) string {
+func (e *Error) Msg() string {
+	return e.msg
+}
+
+func (e *Error) Msgf(args ...interface{}) string {
 	return fmt.Sprintf(e.msg, args...)
 }
 
