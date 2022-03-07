@@ -27,6 +27,11 @@ func IsProd() bool {
 	return strings.ToLower(config.GetString("app.env")) == "prod"
 }
 
+// IsDebug 是否为调试模式
+func IsDebug() bool {
+	return config.GetBool("app.debug")
+}
+
 // TimeNowInTimezone 获取当前时区的时间
 func TimeNowInTimezone() time.Time {
 	chinaTimezone, _ := time.LoadLocation(config.GetString("app.timezone"))
