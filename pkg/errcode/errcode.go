@@ -36,8 +36,11 @@ func (e *Error) Msg() string {
 	return e.msg
 }
 
-func (e *Error) Msgf(args ...interface{}) string {
-	return fmt.Sprintf(e.msg, args...)
+// Msgf 覆写错误提示信息
+func (e *Error) Msgf(args ...interface{}) *Error {
+	newError := *e
+	newError.msg = fmt.Sprintf(e.msg, args...)
+	return &newError
 }
 
 // Details 返回错误详细信息
