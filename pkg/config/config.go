@@ -44,7 +44,7 @@ func NewConfig(env string, configs ...string) {
 				console.Exit("配置文件 [%s] 不存在！", configFile)
 			}
 
-			// 设置配置文件路径为相对路径，相对于 main.go 比如：vp.AddConfigPath("configs/")
+			// 设置配置文件路径为相对路径，相对于 main.go 比如：vp.AddConfigPath("config/")
 			vp.AddConfigPath(config)
 		}
 	}
@@ -59,7 +59,7 @@ func NewConfig(env string, configs ...string) {
 
 // fetchConfigFile 根据环境变量加载对应的配置文件
 func fetchConfigFile(env string) string {
-	// 如果没设置环境变量，那么默认使用【config/config.yaml 配置文件】
+	// 如果没设置环境变量，那么默认使用【etc/config.yaml 配置文件】
 	if env == "" {
 		return "config"
 	}
