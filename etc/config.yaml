@@ -1,0 +1,50 @@
+App:
+  Name: gin-biz-web-api
+  Env: local
+  Key: zBqYyQrPNaIUsnRhsGtHLivjqiMjBVLS
+  Debug: true
+  Url: http://localhost:8000
+  Port: 3000 # 默认的 HTTP 监听端口
+  GinRunMode: debug # 设置 gin 框架的运行模式
+Log:
+  Type: daily
+
+Server: # 服务配置
+  RunMode: debug  # 设置 gin 的运行模式
+  HttpPort: 8000  # 默认的 HTTP 监听端口
+  ReadTimeout: 60  # 允许读取的最大持续时间
+  WriteTimeout: 60  # 允许写入的最大持续时间
+Apps: # 应用配置
+  DefaultPageSize: 10  # 设置默认每页数量
+  MaxPageSize: 100  # 所允许的最大每页数量
+  DefaultContextTimeout: 60
+  LogSavePath: storage/logs  # 默认的应用日志存储路径
+  LogFileName: app
+  LogFileExt: .log
+  UploadSavePath: public/uploads  # 上传文件的最终保存目录
+  UploadServerUrl: http://127.0.0.1:8000/static  # 上传文件后的用于展示的文件服务地址
+  UploadImageMaxSize: 5  # 上传文件所允许的最大空间大小（MB）
+  UploadImageAllowExts: # 上传文件所允许的文件后缀
+    - .jpg
+    - .jpeg
+    - .png
+DB:
+  Driver: mysql
+  Host: 127.0.0.1
+  Port: 3306
+  Database: goblog
+  Username: root
+  Password: 123456
+  Charset: utf8mb4
+Redis: # redis 相关配置
+  Host: 127.0.0.1
+  Port: 6379
+  Username:
+  Password:
+  DB: 0
+Cache: # 缓存相关配置，默认使用的也是 redis 驱动
+  Host: 127.0.0.1
+  Port: 6379
+  Username:
+  Password:
+  DB: 1 # 建议将缓存存储位置和业务 redis 存储位置区分开来
