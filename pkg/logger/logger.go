@@ -94,11 +94,12 @@ func getLogWriter(filename string, maxSize, maxBackup, maxAge int, compress bool
 
 	// 滚动日志，详见 config/log.go 配置文件
 	lumberJackLogger := &lumberjack.Logger{
-		Filename:   filename,
-		MaxSize:    maxSize,
-		MaxAge:     maxAge,
-		MaxBackups: maxBackup,
-		Compress:   compress,
+		Filename:   filename,  // 文件路径
+		MaxSize:    maxSize,   // 单个文件最大尺寸，默认单位为 M
+		MaxAge:     maxAge,    // 最大时间，默认单位为：天 day
+		MaxBackups: maxBackup, // 最多保存多少个备份文件
+		Compress:   compress,  // 是否压缩
+		LocalTime:  true,      // 使用本地时间
 	}
 
 	if app.IsLocal() {
