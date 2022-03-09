@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"github.com/gin-gonic/gin"
+	"github.com/spf13/cast"
 	"go.uber.org/zap"
 
 	"gin-biz-web-api/pkg/helper/strx"
@@ -30,11 +31,11 @@ func AccessLog() gin.HandlerFunc {
 	return func(c *gin.Context) {
 
 		// 获取 response 内容
-		ResponseBodyWriter := &AccessLogWriter{
+		responseBodyWriter := &AccessLogWriter{
 			ResponseWriter: c.Writer,
 			body:           bytes.NewBufferString(""),
 		}
-		c.Writer = ResponseBodyWriter
+		c.Writer = responseBodyWriter
 
 		// 获取请求数据
 		var requestBody []byte
@@ -48,25 +49,37 @@ func AccessLog() gin.HandlerFunc {
 		// 设置开始时间
 		start := time.Now()
 		c.Next()
-
 		// 程序执行花费时间
 		cost := time.Since(start)
+
 		// http 响应状态码
-		responseStatus := c.Writer.Status()
+		responseStatus := responseBodyWriter.Status()
 
 		// 开始记录日志
 		logFields := []zap.Field{
-			zap.String("request_method", c.Request.Method),
-			zap.String("request_url", c.Request.URL.String()),
-			zap.String("request_query", c.Request.URL.RawQuery),
-			zap.String("client_ip", c.ClientIP()),
-			zap.String("user-agent", c.Request.UserAgent()),
+			zap.String("request_method", c.Request.Method),      // 当前请求的方法
+			zap.String("request_host", c.Request.Host),          // 请求的 host
+			zap.String("request_url", c.Request.URL.String()),   // 请求的 url
+			zap.String("request_query", c.Request.URL.RawQuery), // 请求的 get 参数
+			zap.String("request_body", string(requestBody)),     // 请求的内容
+			zap.String("client_ip", c.ClientIP()),               // 客户端的 ip 地址
+			zap.String("user-agent", c.Request.UserAgent()),     // 用户请求头
+			zap.Any("headers", c.Request.Header),                // 请求头
 			zap.String("errors", c.Errors.ByType(gin.ErrorTypePrivate).String()),
-			zap.Int("response_status", responseStatus),
-			zap.String("code_execute_time", strx.StrMicroseconds(cost)),
+			zap.Int("response_status", responseStatus),                    // 当前的响应结果状态码
+			zap.String("code_execute_time", strx.StrMicroseconds(cost)),   // 程序执行时间
+			zap.String("response_body", responseBodyWriter.body.String()), // 当前的请求结果响应体
 		}
 
-		logger.Debug("HTTP Access Log", logFields...)
+		if responseStatus > 400 && responseStatus <= 499 {
+			// 除了 StatusBadRequest 以外，warning 提示一下，常见的有 403 404，开发时都要注意
+			logger.Warn("HTTP Warning [ "+cast.ToString(responseStatus)+" ]", logFields...)
+		} else if responseStatus >= 500 && responseStatus <= 599 {
+			// 除了内部错误，记录 error
+			logger.Error("HTTP Error [ "+cast.ToString(responseStatus)+" ]", logFields...)
+		} else {
+			logger.Debug("HTTP Access Log", logFields...)
+		}
 
 	}
 }
