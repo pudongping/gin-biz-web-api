@@ -6,6 +6,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 
+	"gin-biz-web-api/internal/middleware"
 	"gin-biz-web-api/internal/routers"
 	"gin-biz-web-api/pkg/console"
 )
@@ -31,6 +32,7 @@ func registerGlobalMiddleWare(router *gin.Engine) {
 	router.Use(
 		gin.Logger(),
 		gin.Recovery(),
+		middleware.AccessLog(), // 请求日志中间件
 	)
 }
 
