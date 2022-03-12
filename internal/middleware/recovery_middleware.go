@@ -58,7 +58,7 @@ func Recovery() gin.HandlerFunc {
 				)
 
 				// 返回 500 状态码
-				app.NewResponse(c).ToErrorResponse(errcode.ServerError)
+				app.NewResponse(c).ToErrorResponse(errcode.InternalServerError)
 				c.Abort()
 			}
 		}()
