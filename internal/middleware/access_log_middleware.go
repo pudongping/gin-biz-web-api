@@ -27,6 +27,7 @@ func (w AccessLogWriter) Write(p []byte) (int, error) {
 }
 
 // AccessLog 记录请求日志
+// 参考：gin.Logger()
 func AccessLog() gin.HandlerFunc {
 	return func(c *gin.Context) {
 
@@ -57,15 +58,14 @@ func AccessLog() gin.HandlerFunc {
 
 		// 开始记录日志
 		logFields := []zap.Field{
-			zap.String("request_method", c.Request.Method), // 当前请求的方法
-			zap.String("request_path", c.Request.URL.Path),
-			zap.String("request_host", c.Request.Host),          // 请求的 host
-			zap.String("request_url", c.Request.URL.String()),   // 请求的 url
-			zap.String("request_query", c.Request.URL.RawQuery), // 请求的 get 参数
-			zap.String("request_body", string(requestBody)),     // 请求的内容
-			zap.String("client_ip", c.ClientIP()),               // 客户端的 ip 地址
-			zap.String("user-agent", c.Request.UserAgent()),     // 用户请求头
-			zap.Any("headers", c.Request.Header),                // 请求头
+			zap.String("request_method", c.Request.Method),                    // 当前请求的方法
+			zap.String("request_path", c.Request.Host+c.Request.URL.String()), // 完整的请求地址
+			zap.String("request_host", c.Request.Host),                        // 请求的 host
+			zap.String("request_url", c.Request.URL.String()),                 // 请求的 url
+			zap.String("request_body", string(requestBody)),                   // 请求的内容
+			zap.String("client_ip", c.ClientIP()),                             // 客户端的 ip 地址
+			zap.String("user-agent", c.Request.UserAgent()),                   // 用户请求头
+			zap.Any("headers", c.Request.Header),                              // 请求头
 			zap.String("errors", c.Errors.ByType(gin.ErrorTypePrivate).String()),
 			zap.Int("response_status", responseStatus),                    // 当前的响应结果状态码
 			zap.String("code_execute_time", strx.StrMicroseconds(cost)),   // 程序执行时间

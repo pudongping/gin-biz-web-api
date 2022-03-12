@@ -16,6 +16,7 @@ import (
 )
 
 // Recovery 使用 zap.Error() 来记录 Panic 和 call stack
+// 参考：gin.Recovery()
 func Recovery() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		defer func() {
