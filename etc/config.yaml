@@ -1,11 +1,12 @@
 App:
   Name: gin-biz-web-api
-  Env: local
+  Env: dev
   Key: zBqYyQrPNaIUsnRhsGtHLivjqiMjBVLS
   Debug: true
   Url: http://localhost:8000
   Port: 3000 # 默认的 HTTP 监听端口
   GinRunMode: debug # 设置 gin 框架的运行模式
+  ContextTimeout: 60 # 上下文超时时间，单位：s
 Log:
   Type: daily
 
