@@ -57,7 +57,8 @@ func AccessLog() gin.HandlerFunc {
 
 		// 开始记录日志
 		logFields := []zap.Field{
-			zap.String("request_method", c.Request.Method),      // 当前请求的方法
+			zap.String("request_method", c.Request.Method), // 当前请求的方法
+			zap.String("request_path", c.Request.URL.Path),
 			zap.String("request_host", c.Request.Host),          // 请求的 host
 			zap.String("request_url", c.Request.URL.String()),   // 请求的 url
 			zap.String("request_query", c.Request.URL.RawQuery), // 请求的 get 参数
