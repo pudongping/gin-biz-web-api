@@ -69,22 +69,32 @@ func (e *Error) HttpStatusCode() int {
 	switch e.Code() {
 	case Success.Code():
 		return http.StatusOK
-	case ServerError.Code():
-		return http.StatusInternalServerError
-	case InvalidParams.Code():
+	case Fail.Code():
+		fallthrough
+	case BadRequest.Code():
 		return http.StatusBadRequest
+	case Unauthorized.Code():
+		fallthrough
+	case Forbidden.Code():
+		return http.StatusUnauthorized
 	case NotFound.Code():
 		return http.StatusNotFound
-	case UnauthorizedAuthNotExist.Code():
-		fallthrough
-	case UnauthorizedTokenError.Code():
-		fallthrough
-	case UnauthorizedTokenTimeout.Code():
-		fallthrough
-	case UnauthorizedTokenGenerate.Code():
-		return http.StatusUnauthorized
+	case MethodNotAllowed.Code():
+		return http.StatusMethodNotAllowed
+	case RequestTimeout.Code():
+		return http.StatusRequestTimeout
+	case UnsupportedMediaType.Code():
+		return http.StatusUnsupportedMediaType
+	case UnprocessableEntity.Code():
+		return http.StatusUnprocessableEntity
 	case TooManyRequests.Code():
 		return http.StatusTooManyRequests
+	case InternalServerError.Code():
+		return http.StatusInternalServerError
+	case BadGateway.Code():
+		return http.StatusBadGateway
+	case GatewayTimeout.Code():
+		return http.StatusGatewayTimeout
 	}
 
 	return http.StatusInternalServerError

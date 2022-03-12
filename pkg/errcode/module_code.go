@@ -2,5 +2,5 @@
 package errcode
 
 var (
-	ErrorUploadFileFail = NewError(20000, "上传文件失败")
+	ErrorUploadFileFail = NewError(200000, "上传文件失败")
 )
