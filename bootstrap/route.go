@@ -3,11 +3,13 @@ package bootstrap
 import (
 	"net/http"
 	"strings"
+	"time"
 
 	"github.com/gin-gonic/gin"
 
 	"gin-biz-web-api/internal/middleware"
 	"gin-biz-web-api/internal/routers"
+	"gin-biz-web-api/pkg/config"
 	"gin-biz-web-api/pkg/console"
 )
 
@@ -33,6 +35,7 @@ func registerGlobalMiddleWare(router *gin.Engine) {
 		gin.Logger(),
 		middleware.AccessLog(), // 请求日志中间件
 		middleware.Recovery(),  // 记录 Panic 和 call stack
+		middleware.ContextTimeout(time.Duration(config.GetUint("app.context_timeout")) * time.Second),  // 上下文超时时间
 	)
 }
 

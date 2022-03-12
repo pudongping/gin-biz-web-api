@@ -61,6 +61,9 @@ func init() {
 
 			// 设置时区，日志记录会用到
 			"timezone": config.Get("App.Timezone", "Asia/Shanghai"),
+
+			// 上下文超时时间（单位：s）
+			"context_timeout": config.Get("App.ContextTimeout", 60),
 		}
 	})
 }
