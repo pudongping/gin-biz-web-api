@@ -33,7 +33,7 @@ func init() {
 		}
 
 		return map[string]interface{}{
-			// 应用名称
+			// 应用名称，使用 redis 和 jwt 时会用到
 			"name": config.Get("App.Name", "gin-biz-web-api"),
 
 			// 是否进入调试模式
@@ -59,7 +59,7 @@ func init() {
 			// 允许写入的最大持续时间（单位：s）
 			"write_timeout": config.Get("App.WriteTimeout", 60),
 
-			// 设置时区，日志记录会用到
+			// 设置时区，使用 jwt 包时会用到
 			"timezone": config.Get("App.Timezone", "Asia/Shanghai"),
 
 			// 上下文超时时间（单位：s）
