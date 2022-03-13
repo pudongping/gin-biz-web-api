@@ -1,3 +1,4 @@
+// 这里的信息必须先经过 AuthJWT 中间件才可以获取
 package auth
 
 import (
