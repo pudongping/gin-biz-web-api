@@ -7,7 +7,7 @@ var (
 	BadRequest           = NewError(100400, "请求异常")
 	Unauthorized         = NewError(100401, "无权操作")
 	Forbidden            = NewError(100403, "禁止操作")
-	NotFound             = NewError(100404, "找不到数据")
+	NotFound             = NewError(100404, "%s数据找不到")
 	MethodNotAllowed     = NewError(100405, "不允许此请求方法")
 	RequestTimeout       = NewError(100408, "请求超时")
 	UnsupportedMediaType = NewError(100415, "请求体错误")
