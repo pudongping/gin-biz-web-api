@@ -16,4 +16,5 @@ var (
 	InternalServerError  = NewError(100500, "服务器内部错误")
 	BadGateway           = NewError(100502, "网关错误")
 	GatewayTimeout       = NewError(100504, "网关超时")
+	DBError              = NewError(100600, "数据库操作失败")
 )
