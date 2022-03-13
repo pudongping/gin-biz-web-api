@@ -1,6 +1,6 @@
 App:
   Name: gin-biz-web-api
-  Env: dev
+  Env: local # 只有本地环境，日志记录才会有换行且高亮
   Key: zBqYyQrPNaIUsnRhsGtHLivjqiMjBVLS
   Debug: true
   Url: http://localhost:8000
