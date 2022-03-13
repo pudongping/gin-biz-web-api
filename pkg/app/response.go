@@ -46,3 +46,17 @@ func (r *Response) ToErrorResponse(err *errcode.Error, messages ...string) {
 
 	r.Ctx.JSON(err.HttpStatusCode(), response)
 }
+
+// ToErrorValidateResponse 验证器验证不通过时，错误返回
+func (r *Response) ToErrorValidateResponse(err *errcode.Error, errors map[string][]string) {
+	response := gin.H{"code": err.Code(), "msg": err.Msg(), "errors": errors}
+
+	if len(errors) > 0 {
+		for k := range errors {
+			response["msg"] = errors[k][0]
+			break
+		}
+	}
+
+	r.Ctx.JSON(err.HttpStatusCode(), response)
+}
