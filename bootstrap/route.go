@@ -8,9 +8,9 @@ import (
 	"github.com/gin-gonic/gin"
 
 	"gin-biz-web-api/internal/middleware"
-	"gin-biz-web-api/internal/routers"
 	"gin-biz-web-api/pkg/config"
 	"gin-biz-web-api/pkg/console"
+	"gin-biz-web-api/routers"
 )
 
 // setupRoute 路由初始化
