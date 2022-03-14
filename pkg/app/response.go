@@ -3,6 +3,7 @@ package app
 
 import (
 	"net/http"
+	"sort"
 
 	"github.com/gin-gonic/gin"
 
@@ -80,10 +81,19 @@ func (r *Response) ToErrorValidateResponse(err *errcode.Error, errors map[string
 	response := gin.H{"code": err.Code(), "msg": err.Msg(), "errors": errors}
 
 	if len(errors) > 0 {
+
+		var kSlice []string
 		for k := range errors {
-			response["msg"] = errors[k][0]
+			kSlice = append(kSlice, k)
+		}
+
+		sort.Strings(kSlice)
+
+		for _, kk := range kSlice {
+			response["msg"] = errors[kk][0]
 			break
 		}
+
 	}
 
 	r.Ctx.JSON(err.HttpStatusCode(), response)
