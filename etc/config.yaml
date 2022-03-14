@@ -36,7 +36,7 @@ DB:
   Driver: mysql
   Host: 127.0.0.1
   Port: 3306
-  Database: goblog
+  Database: gin_biz_web_api
   Username: root
   Password: 123456
   Charset: utf8mb4
