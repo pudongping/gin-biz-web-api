@@ -210,11 +210,9 @@ func (j *JWT) GetToken(c *gin.Context) (string, error) {
 
 	if query, exists := c.GetQuery("token"); exists && "" != query {
 		token = query
-	}
-	if post, exists := c.GetPostForm("token"); exists && "" != post {
+	} else if post, exists := c.GetPostForm("token"); exists && "" != post {
 		token = post
-	}
-	if "" == token {
+	} else {
 		token = c.GetHeader("token")
 	}
 
