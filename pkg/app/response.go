@@ -8,6 +8,7 @@ import (
 	"github.com/gin-gonic/gin"
 
 	"gin-biz-web-api/pkg/errcode"
+	"gin-biz-web-api/pkg/logger"
 )
 
 type Response struct {
@@ -42,7 +43,11 @@ func (r *Response) ToErrorResponse(err *errcode.Error, messages ...string) {
 
 	details := err.Details()
 	if len(details) > 0 {
-		response["details"] = details
+		if r.isShowDetails() {
+			response["details"] = details
+		} else {
+			logger.ErrorJSON("ToErrorResponse", "details", details)
+		}
 	}
 
 	r.Ctx.JSON(err.HttpStatusCode(), response)
@@ -78,7 +83,7 @@ func (r *Response) ToErrorResponse(err *errcode.Error, messages ...string) {
 //    "msg": "验证码为必填"
 // }
 func (r *Response) ToErrorValidateResponse(err *errcode.Error, errors map[string][]string) {
-	response := gin.H{"code": err.Code(), "msg": err.Msg(), "errors": errors}
+	response := gin.H{"code": err.Code(), "msg": err.Msg()}
 
 	if len(errors) > 0 {
 
@@ -94,7 +99,16 @@ func (r *Response) ToErrorValidateResponse(err *errcode.Error, errors map[string
 			break
 		}
 
+		if r.isShowDetails() {
+			response["details"] = errors
+		}
+
 	}
 
 	r.Ctx.JSON(err.HttpStatusCode(), response)
+}
+
+// isShowDetails 本地环境或者开发环境且开启了 debug 模式，则在返回结果中显示错误详情信息
+func (r *Response) isShowDetails() bool {
+	return IsDebug() && (IsLocal() || IsDev())
 }
