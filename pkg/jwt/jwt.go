@@ -185,9 +185,9 @@ func (j *JWT) expireAtTime() int64 {
 
 	var expireTime int64
 
-	if app.IsDebug() {
+	if app.IsLocal() {
 		// 调试模式时，使用调试模式的过期时间
-		expireTime = config.GetInt64("jwt.debug_expire_time")
+		expireTime = config.GetInt64("jwt.local_expire_time")
 	} else {
 		expireTime = config.GetInt64("jwt.expire_time")
 	}
