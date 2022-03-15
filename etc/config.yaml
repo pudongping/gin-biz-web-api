@@ -1,7 +1,7 @@
 App:
   Name: gin-biz-web-api
-  Env: local # 只有本地环境，日志记录才会有换行且高亮
-  Debug: true
+  Env: local
+  Debug: true # 只有开启 debug 模式时，日志记录才会有换行且高亮
   Url: http://localhost:8000
   Port: 3000 # 默认的 HTTP 监听端口
   GinRunMode: debug # 设置 gin 框架的运行模式

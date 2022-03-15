@@ -65,8 +65,8 @@ func getEncoder() zapcore.Encoder {
 		EncodeCaller:   zapcore.ShortCallerEncoder,     // Caller 短格式，如：internal/dao/user_dao.go:66，长格式为绝对路径
 	}
 
-	// 本地环境配置
-	if app.IsLocal() {
+	// debug 模式时的配置
+	if app.IsDebug() {
 		// 终端输出的关键词高亮
 		encoderConfig.EncodeLevel = zapcore.CapitalColorLevelEncoder
 		// 本地设置内置的 Console 解码器（支持 stacktrace 换行）
@@ -102,11 +102,11 @@ func getLogWriter(filename string, maxSize, maxBackup, maxAge int, compress bool
 		LocalTime:  true,      // 使用本地时间
 	}
 
-	if app.IsLocal() {
-		// 本地开发时，终端打印和记录文件
+	if app.IsDebug() {
+		// debug 模式时，终端打印和记录文件
 		return zapcore.NewMultiWriteSyncer(zapcore.AddSync(os.Stdout), zapcore.AddSync(lumberJackLogger))
 	} else {
-		// 除了本地环境以外，其他环境均只记录文件
+		// 非 debug 模式时，均只记录文件
 		return zapcore.AddSync(lumberJackLogger)
 	}
 
