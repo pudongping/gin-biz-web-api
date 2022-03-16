@@ -56,13 +56,13 @@ func ConnectRedis(configs RdsConfigs) {
 			rdsCollections = make(map[string]*RdsClient)
 		}
 
-		for group, config := range configs {
+		for group, cfg := range configs {
 			// 实例化多个 redis 对象到实例集合中
 			rdsCollections[group] = NewClient(
-				config.Addr,
-				config.Username,
-				config.Password,
-				config.DB,
+				cfg.Addr,
+				cfg.Username,
+				cfg.Password,
+				cfg.DB,
 			)
 		}
 

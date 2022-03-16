@@ -60,14 +60,14 @@ func (l GormLogger) Trace(ctx context.Context, begin time.Time, fc func() (strin
 
 	// 获取运行时间
 	elapsed := time.Since(begin)
-	// 获取 sql 请求和返回条数
+	// 获取 sql 请求和受影响的行数
 	sql, rows := fc()
 
 	// 通用字段
 	logFields := []zap.Field{
 		zap.String("sql", sql),
-		zap.String("time", strx.StrMicroseconds(elapsed)),
-		zap.Int64("rows", rows), // 受影响的行数
+		zap.String("took time", strx.StrMicroseconds(elapsed)),
+		zap.Int64("affected rows", rows), // 受影响的行数
 	}
 
 	// gorm 错误
