@@ -5,8 +5,8 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/thedevsaddam/govalidator"
 
-	"gin-biz-web-api/pkg/app"
 	"gin-biz-web-api/pkg/errcode"
+	"gin-biz-web-api/pkg/responses"
 )
 
 // ValidateFunc 验证器的函数
@@ -14,7 +14,7 @@ type ValidateFunc func(interface{}, *gin.Context) map[string][]string
 
 // BindAndValidate 控制器中调用
 func BindAndValidate(c *gin.Context, obj interface{}, handler ValidateFunc) bool {
-	response := app.NewResponse(c)
+	response := responses.New(c)
 
 	// 解析请求，支持 JSON 数据、表单请求和 URL Query
 	// 参见：[gin 框架中文文档](https://www.kancloud.cn/shuangdeyu/gin_book/949426)
