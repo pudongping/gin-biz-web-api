@@ -27,6 +27,11 @@ func init() {
 	//              "props", "prop", "env", "dotenv"
 	vp.SetConfigType("yaml") // 设置配置文件的类型为 yaml
 
+	// 设置环境变量前缀，用以区分 Go 的系统环境变量
+	// vp.SetEnvPrefix("app_env")
+	// 读取环境变量（支持 flags）
+	// vp.AutomaticEnv()
+
 	ConfigFuncs = make(map[string]ConfigFunc)
 }
 
