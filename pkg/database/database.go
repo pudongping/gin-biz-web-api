@@ -2,10 +2,12 @@ package database
 
 import (
 	"database/sql"
+	"fmt"
 
 	"gorm.io/gorm"
 	gormLogger "gorm.io/gorm/logger"
 
+	"gin-biz-web-api/pkg/config"
 	"gin-biz-web-api/pkg/console"
 )
 
@@ -35,6 +37,39 @@ func Connect(dbConfig gorm.Dialector, lg gormLogger.Interface) {
 	SQLDB, err = DB.DB()
 	console.ExitIf(err)
 
+}
+
+// DropAllTables 删除所有表（其实是直接删库跑路，😊）
+// most dangerous !!!
+func DropAllTables() error {
+	var err error
+
+	switch config.GetString("database.driver") {
+	case "mysql":
+		err = dropMysqlDatabase()
+	default:
+		console.Exit("database driver not supported")
+	}
+
+	return err
+}
+
+// dropMysqlDatabase 删除数据库
+func dropMysqlDatabase() error {
+	dbname := CurrentDatabase()
+	s := fmt.Sprintf("drop database %s;", dbname)
+	if err := DB.Exec(s).Error; err != nil {
+		return err
+	}
+	s = fmt.Sprintf("create database %s default charset utf8mb4 collate utf8mb4_general_ci;", dbname)
+	if err := DB.Exec(s).Error; err != nil {
+		return err
+	}
+	s = fmt.Sprintf("use %s;", dbname)
+	if err := DB.Exec(s).Error; err != nil {
+		return err
+	}
+	return nil
 }
 
 // CurrentDatabase 返回当前数据库名称
