@@ -5,27 +5,29 @@ import (
 	"github.com/gin-gonic/gin"
 
 	"gin-biz-web-api/model/user_model"
-	"gin-biz-web-api/pkg/app"
 	"gin-biz-web-api/pkg/errcode"
 	"gin-biz-web-api/pkg/jwt"
+	"gin-biz-web-api/pkg/responses"
 )
 
 func AuthJWT() gin.HandlerFunc {
 	return func(c *gin.Context) {
+
+		response := responses.New(c)
 
 		// 自动获取 token，并解析 token
 		claims, err := jwt.NewJWT().ParseToken(c)
 
 		// jwt 解析失败
 		if err != nil {
-			app.NewResponse(c).ToErrorResponse(errcode.BadRequest.WithDetails(err.Error()))
+			response.ToErrorResponse(errcode.BadRequest.WithDetails(err.Error()))
 			return
 		}
 
 		// jwt 解析成功，设置用户信息
 		user := user_model.GetOne(claims.UserID)
 		if user.ID == 0 {
-			app.NewResponse(c).ToErrorResponse(errcode.NotFound.Msgf("用户"))
+			response.ToErrorResponse(errcode.NotFound.Msgf("用户"))
 			return
 		}
 

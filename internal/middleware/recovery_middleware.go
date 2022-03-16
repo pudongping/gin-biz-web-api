@@ -10,9 +10,9 @@ import (
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
 
-	"gin-biz-web-api/pkg/app"
 	"gin-biz-web-api/pkg/errcode"
 	"gin-biz-web-api/pkg/logger"
+	"gin-biz-web-api/pkg/responses"
 )
 
 // Recovery 使用 zap.Error() 来记录 Panic 和 call stack
@@ -58,7 +58,7 @@ func Recovery() gin.HandlerFunc {
 				)
 
 				// 返回 500 状态码
-				app.NewResponse(c).ToErrorResponse(errcode.InternalServerError)
+				responses.New(c).ToErrorResponse(errcode.InternalServerError)
 				c.Abort()
 			}
 		}()
