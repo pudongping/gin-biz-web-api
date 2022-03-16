@@ -4,7 +4,7 @@ package strx
 import (
 	"crypto/rand"
 	"io"
-	mathrand "math/rand"
+	mathRand "math/rand"
 	"time"
 )
 
@@ -24,11 +24,11 @@ func StrRandomNumber(length int) string {
 
 // StrRandomString 生成长度为 length 的随机字母字符串
 func StrRandomString(length int) string {
-	mathrand.Seed(time.Now().UnixNano())
+	mathRand.Seed(time.Now().UnixNano())
 	letters := "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
 	b := make([]byte, length)
 	for i := range b {
-		b[i] = letters[mathrand.Intn(len(letters))]
+		b[i] = letters[mathRand.Intn(len(letters))]
 	}
 	return string(b)
 }
