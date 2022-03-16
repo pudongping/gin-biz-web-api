@@ -1,5 +1,5 @@
 // 数据返回封装
-package app
+package responses
 
 import (
 	"net/http"
@@ -7,6 +7,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 
+	"gin-biz-web-api/pkg/app"
 	"gin-biz-web-api/pkg/errcode"
 	"gin-biz-web-api/pkg/logger"
 )
@@ -15,8 +16,8 @@ type Response struct {
 	Ctx *gin.Context
 }
 
-// NewResponse 实例化返回类
-func NewResponse(ctx *gin.Context) *Response {
+// New 实例化返回类
+func New(ctx *gin.Context) *Response {
 	return &Response{Ctx: ctx}
 }
 
@@ -110,5 +111,5 @@ func (r *Response) ToErrorValidateResponse(err *errcode.Error, errors map[string
 
 // isShowDetails 本地环境或者开发环境且开启了 debug 模式，则在返回结果中显示错误详情信息
 func (r *Response) isShowDetails() bool {
-	return IsDebug() && (IsLocal() || IsDev())
+	return app.IsDebug() && (app.IsLocal() || app.IsDev())
 }
