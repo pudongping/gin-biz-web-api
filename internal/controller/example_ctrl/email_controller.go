@@ -9,6 +9,7 @@ import (
 	"gin-biz-web-api/pkg/email"
 	"gin-biz-web-api/pkg/errcode"
 	"gin-biz-web-api/pkg/responses"
+	"gin-biz-web-api/pkg/verifycode"
 )
 
 type EmailController struct {
@@ -65,6 +66,21 @@ func (ctrl *EmailController) SendMailer(c *gin.Context) {
 
 	if err != nil {
 		response.ToErrorResponse(errcode.InternalServerError.WithDetails(err.Error()), "邮件发送失败")
+		return
+	}
+
+	response.ToResponse(nil)
+}
+
+// SendEmailVerifyCode 发送邮件验证码
+// curl --location --request POST 'localhost:3000/api/example/send-email-verify-code'
+func (ctrl *EmailController) SendEmailVerifyCode(c *gin.Context) {
+	response := responses.New(c)
+
+	err := verifycode.NewVerifyCode().SendEmailVerifyCode("276558492@qq.com")
+
+	if err != nil {
+		response.ToErrorResponse(errcode.InternalServerError.WithDetails(err.Error()), "邮件验证码发送失败")
 		return
 	}
 
