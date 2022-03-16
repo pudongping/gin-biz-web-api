@@ -37,7 +37,7 @@ func init() {
 			"name": config.Get("App.Name", "gin-biz-web-api"),
 
 			// 是否进入调试模式
-			"debug": config.Get("App.Debug", true),
+			"debug": config.Get("App.Debug", false),
 
 			"url": config.Get("App.Url", "http://localhost"),
 
