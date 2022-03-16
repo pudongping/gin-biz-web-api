@@ -46,5 +46,9 @@ func apiExample(api *gin.RouterGroup) {
 		captchaCtrl := new(example_ctrl.CaptchaController)
 		exampleGroup.GET("/show-captcha", captchaCtrl.ShowCaptcha)               // 显示图像验证码
 		exampleGroup.POST("/verify-captcha-code", captchaCtrl.VerifyCaptchaCode) // 验证图像验证码
+
+		emailCtrl := new(example_ctrl.EmailController)
+		exampleGroup.POST("/send-email", emailCtrl.SendEmail) // 发送邮件
+		exampleGroup.POST("/send-mailer", emailCtrl.SendMailer)  // 使用 email 驱动发送邮件
 	}
 }
