@@ -15,6 +15,7 @@ type EmailController struct {
 }
 
 // SendEmail 发送邮件
+// curl --location --request POST 'localhost:3000/api/example/send-email'
 func (ctrl *EmailController) SendEmail(c *gin.Context) {
 	response := responses.New(c)
 
@@ -38,6 +39,7 @@ func (ctrl *EmailController) SendEmail(c *gin.Context) {
 }
 
 // SendMailer 使用 email 驱动发送邮件
+// curl --location --request POST 'localhost:3000/api/example/send-mailer'
 func (ctrl *EmailController) SendMailer(c *gin.Context) {
 	response := responses.New(c)
 
