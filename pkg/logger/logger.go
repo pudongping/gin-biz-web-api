@@ -3,7 +3,6 @@ package logger
 
 import (
 	"encoding/json"
-	"fmt"
 	"os"
 	"strings"
 	"time"
@@ -13,6 +12,7 @@ import (
 	"gopkg.in/natefinch/lumberjack.v2"
 
 	"gin-biz-web-api/pkg/app"
+	"gin-biz-web-api/pkg/console"
 )
 
 // Logger 全局 Logger 对象
@@ -26,7 +26,7 @@ func InitLogger(filename string, maxSize, maxBackup, maxAge int, compress bool, 
 	// 设置日志等级，具体请见 config/log.go 配置文件
 	logLevel := new(zapcore.Level)
 	if err := logLevel.UnmarshalText([]byte(level)); err != nil {
-		fmt.Println("日志初始化错误，日志级别设置有误。请修改 config/log.go 文件中的 log.level 配置项")
+		console.Exit("日志初始化错误，日志级别设置有误。请修改 config/log.go 文件中的 log.level 配置项")
 	}
 
 	// 初始化 core
@@ -41,8 +41,10 @@ func InitLogger(filename string, maxSize, maxBackup, maxAge int, compress bool, 
 	)
 
 	// 将自定义的 logger 替换为全局的 logger
-	// zap.L().Fatal() 调用时，就会使用我们自定的 Logger
 	// zap.L() 相当于 *zap.Logger
+	// eg：以下二者打印出来的内容完全一致
+	// zap.L().Debug("Cache", zap.String("Flush", "danger!!!"), zap.Time("time", time.Now()))
+	// logger.Debug("Cache", zap.String("Flush", "danger!!!"), zap.Time("time", time.Now()))
 	zap.ReplaceGlobals(Logger)
 }
 
@@ -112,10 +114,28 @@ func getLogWriter(filename string, maxSize, maxBackup, maxAge int, compress bool
 
 }
 
-// Dump 调试专用，不会中断程序，会在终端打印出 warning 消息
-// 第一个参数会使用 json.Marshal 进行渲染，第二个参数消息（可选）
-//         logger.Dump(user.User{Name:"alex"})
-//         logger.Dump(user.User{Name:"alex"}, "用户信息")
+// Dump 方便调试时使用，会记录 warn 级别信息
+// eg1：只有一个参数时
+// 	logger.Dump(struct {
+//		Name, Sex string
+//		Age       int32
+//	}{
+//		Name: "alex",
+//		Sex:  "m",
+//		Age:  18,
+//	})
+//
+// output：2022-03-18 01:18:19     WARN    cache/redis_driver.go:52        Dump    {"data": "{\"Name\":\"alex\",\"Sex\":\"m\",\"Age\":18}"}
+// eg2：有两个参数时
+// 	logger.Dump(struct {
+//		Name, Sex string
+//		Age       int32
+//	}{
+//		Name: "alex",
+//		Sex:  "m",
+//		Age:  18,
+//	}, "个人信息")
+// output：2022-03-18 01:20:43     WARN    cache/redis_driver.go:52        Dump    {"个人信息": "{\"Name\":\"alex\",\"Sex\":\"m\",\"Age\":18}"}
 func Dump(value interface{}, msg ...string) {
 	valueString := jsonString(value)
 	// 判断第二个参数是否传参 msg
@@ -126,7 +146,9 @@ func Dump(value interface{}, msg ...string) {
 	}
 }
 
-// LogErrorIf 当 err != nil 时记录 error 等级的日志
+// LogErrorIf 当 err != nil 时记录 error 等级的日志（有调用堆栈信息）
+// eg：logger.LogErrorIf(errors.New("没有权限"))
+// output：2022-03-18 01:23:33     ERROR   cache/redis_driver.go:53        Error Occurred: {"error": "没有权限"}
 func LogErrorIf(err error) {
 	if err != nil {
 		Logger.Error("Error Occurred:", zap.Error(err))
@@ -134,6 +156,8 @@ func LogErrorIf(err error) {
 }
 
 // LogWarnIf 当 err != nil 时记录 warning 等级的日志
+// eg：logger.LogWarnIf(errors.New("没有权限"))
+// output：2022-03-18 01:26:21     WARN    cache/redis_driver.go:53        Error Occurred: {"error": "没有权限"}
 func LogWarnIf(err error) {
 	if err != nil {
 		Logger.Warn("Error Occurred:", zap.Error(err))
@@ -141,79 +165,131 @@ func LogWarnIf(err error) {
 }
 
 // LogInfoIf 当 err != nil 时记录 info 等级的日志
+// eg：logger.LogInfoIf(errors.New("没有权限"))
+// output：2022-03-18 01:27:25     INFO    cache/redis_driver.go:53        Error Occurred: {"error": "没有权限"}
 func LogInfoIf(err error) {
 	if err != nil {
 		Logger.Info("Error Occurred:", zap.Error(err))
 	}
 }
 
-// Debug 调试日志，详尽的程序日志
-// 调用示例：
-//        logger.Debug("Database", zap.String("sql", sql))
+// Debug 调试类日志
+// eg：logger.Debug("Cache", zap.String("Flush", "danger!!!"), zap.Time("time", time.Now().Local()))
+// output：2022-03-18 00:14:29     DEBUG   cache/redis_driver.go:52        Cache   {"Flush": "danger!!!", "time": "2022-03-18 00:14:29"}
 func Debug(moduleName string, fields ...zap.Field) {
 	Logger.Debug(moduleName, fields...)
 }
 
 // Info 告知类日志
+// eg：logger.Info("Cache", zap.String("Flush", "danger!!!"), zap.Time("time", time.Now()))
+// output：2022-03-18 00:25:41     INFO    cache/redis_driver.go:52        Cache   {"Flush": "danger!!!", "time": "2022-03-18 00:25:41"}
 func Info(moduleName string, fields ...zap.Field) {
 	Logger.Info(moduleName, fields...)
 }
 
 // Warn 警告类
+// eg：logger.Warn("Cache", zap.String("Flush", "danger!!!"), zap.Time("time", time.Now()))
+// output：2022-03-18 00:27:08     WARN    cache/redis_driver.go:52        Cache   {"Flush": "danger!!!", "time": "2022-03-18 00:27:08"}
 func Warn(moduleName string, fields ...zap.Field) {
 	Logger.Warn(moduleName, fields...)
 }
 
-// Error 错误时记录，不应该中断程序，查看日志时重点关注
+// Error 错误时记录（会打印出调用堆栈，但是不会退出程序）
+// eg：logger.Error("Cache", zap.String("Flush", "danger!!!"), zap.Time("time", time.Now()))
+// output：2022-03-18 00:28:36     ERROR   cache/redis_driver.go:52        Cache   {"Flush": "danger!!!", "time": "2022-03-18 00:28:36"}
 func Error(moduleName string, fields ...zap.Field) {
 	Logger.Error(moduleName, fields...)
 }
 
-// Fatal 级别同 Error(), 写完 log 后调用 os.Exit(1) 退出程序
+// Fatal 致命时记录（会打印出调用堆栈，写完 log 后调用 os.Exit(1) 直接退出程序）
+// eg：logger.Fatal("Cache", zap.String("Flush", "danger!!!"), zap.Time("time", time.Now()))
+// output：2022-03-18 00:32:42     FATAL   cache/redis_driver.go:52        Cache   {"Flush": "danger!!!", "time": "2022-03-18 00:32:42"}
 func Fatal(moduleName string, fields ...zap.Field) {
 	Logger.Fatal(moduleName, fields...)
 }
 
+// DebugString
+// eg：logger.DebugString("Cache", "Flush", "danger!!!")
+// output：2022-03-18 00:38:09     DEBUG   cache/redis_driver.go:51        Cache   {"Flush": "danger!!!"}
 func DebugString(moduleName, name, msg string) {
 	Logger.Debug(moduleName, zap.String(name, msg))
 }
 
+// InfoString
+// eg：logger.InfoString("Cache", "Flush", "danger!!!")
+// output：2022-03-18 00:40:19     INFO    cache/redis_driver.go:51        Cache   {"Flush": "danger!!!"}
 func InfoString(moduleName, name, msg string) {
 	Logger.Info(moduleName, zap.String(name, msg))
 }
 
+// WarnString
+// eg：logger.WarnString("Cache", "Flush", "danger!!!")
+// output：2022-03-18 00:41:39     WARN    cache/redis_driver.go:51        Cache   {"Flush": "danger!!!"}
 func WarnString(moduleName, name, msg string) {
 	Logger.Warn(moduleName, zap.String(name, msg))
 }
 
+// ErrorString 错误时记录（会打印出调用堆栈，但是不会退出程序）
+// eg：logger.ErrorString("Cache", "Flush", "danger!!!")
+// output：2022-03-18 00:42:57     ERROR   cache/redis_driver.go:51        Cache   {"Flush": "danger!!!"}
 func ErrorString(moduleName, name, msg string) {
 	Logger.Error(moduleName, zap.String(name, msg))
 }
 
+// FatalString 记录致命错误日志（会打印出调用堆栈，写完 log 后调用 os.Exit(1) 直接退出程序）
+// eg：logger.FatalString("Cache", "Flush", "danger!!!")
+// output：2022-03-18 00:44:39     FATAL   cache/redis_driver.go:51        Cache   {"Flush": "danger!!!"}
 func FatalString(moduleName, name, msg string) {
 	Logger.Fatal(moduleName, zap.String(name, msg))
 }
 
+// DebugJSON
+// eg1：logger.DebugJSON("Cache", "Flush", map[string][]string{"boys": {"alex", "bob"}, "sex":  {"f", "m"}})
+// output：2022-03-18 00:52:32     DEBUG   cache/redis_driver.go:51        Cache   {"Flush": "{\"boys\":[\"alex\",\"bob\"],\"sex\":[\"f\",\"m\"]}"}
+//
+// eg2：
+// 	logger.DebugJSON("Cache", "Flush", struct {
+//		Name, Sex string
+//		Age       int32
+//	}{
+//		Name: "alex",
+//		Sex:  "m",
+//		Age:  18,
+//	})
+// output：2022-03-18 01:10:10     DEBUG   cache/redis_driver.go:52        Cache   {"Flush": "{\"Name\":\"alex\",\"Sex\":\"m\",\"Age\":18}"}
 func DebugJSON(moduleName, name string, value interface{}) {
 	Logger.Debug(moduleName, zap.String(name, jsonString(value)))
 }
 
+// InfoJSON
+// eg：logger.InfoJSON("Cache", "Flush", map[string][]string{"boys": {"alex", "bob"}, "sex":  {"f", "m"}})
+// output：2022-03-18 00:54:39     INFO    cache/redis_driver.go:51        Cache   {"Flush": "{\"boys\":[\"alex\",\"bob\"],\"sex\":[\"f\",\"m\"]}"}
 func InfoJSON(moduleName, name string, value interface{}) {
 	Logger.Info(moduleName, zap.String(name, jsonString(value)))
 }
 
+// WarnJSON
+// eg：logger.WarnJSON("Cache", "Flush", map[string][]string{"boys": {"alex", "bob"}, "sex":  {"f", "m"}})
+// output：2022-03-18 00:55:38     WARN    cache/redis_driver.go:51        Cache   {"Flush": "{\"boys\":[\"alex\",\"bob\"],\"sex\":[\"f\",\"m\"]}"}
 func WarnJSON(moduleName, name string, value interface{}) {
 	Logger.Warn(moduleName, zap.String(name, jsonString(value)))
 }
 
+// ErrorJSON 错误时记录（会打印出调用堆栈，但是不会退出程序）
+// eg：logger.ErrorJSON("Cache", "Flush", map[string][]string{"boys": {"alex", "bob"}, "sex":  {"f", "m"}})
+// output：2022-03-18 00:56:43     ERROR   cache/redis_driver.go:51        Cache   {"Flush": "{\"boys\":[\"alex\",\"bob\"],\"sex\":[\"f\",\"m\"]}"}
 func ErrorJSON(moduleName, name string, value interface{}) {
 	Logger.Error(moduleName, zap.String(name, jsonString(value)))
 }
 
+// FatalJSON 记录致命错误日志（会打印出调用堆栈，写完 log 后调用 os.Exit(1) 直接退出程序）
+// eg：logger.FatalJSON("Cache", "Flush", map[string][]string{"boys": {"alex", "bob"}, "sex":  {"f", "m"}})
+// output：2022-03-18 00:58:06     FATAL   cache/redis_driver.go:51        Cache   {"Flush": "{\"boys\":[\"alex\",\"bob\"],\"sex\":[\"f\",\"m\"]}"}
 func FatalJSON(moduleName, name string, value interface{}) {
 	Logger.Fatal(moduleName, zap.String(name, jsonString(value)))
 }
 
+// jsonString 将数据转成 json 字符串
 func jsonString(value interface{}) string {
 	b, err := json.Marshal(value)
 	if err != nil {
