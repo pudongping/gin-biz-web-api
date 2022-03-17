@@ -1,15 +1,10 @@
 # redis 缓存
 
-## 引入
-
-```go
-import (
-"context"
-
-"gin-biz-web-api/pkg/redis"
-)
-
-```
+> 使用了依赖包 [redis](https://github.com/go-redis/redis/v8) 基于此包简单封装了一些方法，详见： `pkg/redis/redis.go`
+> 
+> 如果使用封装的方法，默认会给所有的 key 以项目名加以前缀，比如：`gin-biz-web-api:key`  
+> 
+> 配置文件详见：`config/redis.go`
 
 ## 简单使用
 
@@ -35,6 +30,8 @@ redis.Increment("num", 3)
 redis.Increment("num", 5, "cache")
 
 // 清空数据库中所有的数据
+// 会清空 redis 连接当前库中所有的数据，这是一个危险⚠️操作！
+// 比如，此时 redis 连接的是 db2 那么则会清空 db2 中所有的 key
 redis.FlushDB()
 
 ```
@@ -51,7 +48,7 @@ redis.Instance("cache")
 
 ```
 
-## 使用 redis 类库包提供的方法
+## 使用 redis 类库包提供的原生方法
 
 ```go
 
@@ -61,5 +58,11 @@ var ctx = context.Background()
 redis.Instance().Client.Set(ctx, "hello", "alex", 0)
 // 获取一个值
 val, err := redis.Instance().Client.Get(ctx, "hello").Result()
+
+// 获取 key 的值类型
+redis.Instance().Client.Type(ctx,"key")
+// 哈希赋值
+redis.Instance().Client.HSet(ctx, "alex", "age", 18)
+redis.Instance().Client.HSet(ctx, "alex", "sex", "m")
 
 ```
