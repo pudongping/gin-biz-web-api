@@ -26,7 +26,7 @@ func NewVerifyCode() *VerifyCode {
 
 		// 这里的 driver 也可以绑定其他的驱动
 		internalVerifyCode = &VerifyCode{Driver: &RedisDriver{
-			KeyPrefix: config.GetString("app.name") + ":verify_code:",
+			KeyPrefix: "verify_code:",
 			Group:     "default", // 使用默认的 config/redis.go 中的 default 配置连接
 		}}
 
