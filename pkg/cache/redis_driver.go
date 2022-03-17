@@ -4,6 +4,9 @@ package cache
 import (
 	"time"
 
+	"github.com/spf13/cast"
+
+	"gin-biz-web-api/pkg/logger"
 	"gin-biz-web-api/pkg/redis"
 )
 
@@ -53,9 +56,33 @@ func (r *RedisDriver) IsAlive() error {
 }
 
 func (r *RedisDriver) Increment(parameters ...interface{}) bool {
-	return redis.Increment(parameters...)
+	return redis.Increment(r.fetchKey(parameters...))
 }
 
 func (r *RedisDriver) Decrement(parameters ...interface{}) bool {
-	return redis.Decrement(parameters...)
+	return redis.Decrement(r.fetchKey(parameters...))
+}
+
+// fetchKey 递增或者递减时，得到 redis.Increment() 或者 redis.Decrement() 的参数
+func (r *RedisDriver) fetchKey(parameters ...interface{}) (string, int64, string) {
+	if len(parameters) < 1 {
+		logger.FatalString("Cache", "fetchKey", "参数不能为空")
+		return "", 0, r.Group
+	}
+
+	key := r.KeyPrefix + cast.ToString(parameters[0])
+
+	switch len(parameters) {
+	case 1:
+		// 当只有一个参数时，第一个参数为 key，默认步长为 1
+		return key, 1, r.Group
+	case 2:
+		// 当有两个参数时，第一个参数为 key，第二个参数为步长
+		return key, cast.ToInt64(parameters[1]), r.Group
+	default:
+		// 超过了两个参数时，直接报错
+		logger.FatalString("Cache", "fetchKey", "参数过多")
+		return "", 0, r.Group
+	}
+
 }
