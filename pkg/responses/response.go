@@ -51,7 +51,8 @@ func (r *Response) ToErrorResponse(err *errcode.Error, messages ...string) {
 		}
 	}
 
-	r.Ctx.JSON(err.HttpStatusCode(), response)
+	// r.Ctx.JSON(err.HttpStatusCode(), response)
+	r.Ctx.AbortWithStatusJSON(err.HttpStatusCode(), response)
 }
 
 // ToErrorValidateResponse 验证器验证不通过时，错误返回
@@ -106,7 +107,7 @@ func (r *Response) ToErrorValidateResponse(err *errcode.Error, errors map[string
 
 	}
 
-	r.Ctx.JSON(err.HttpStatusCode(), response)
+	r.Ctx.AbortWithStatusJSON(err.HttpStatusCode(), response)
 }
 
 // isShowDetails 本地环境或者开发环境且开启了 debug 模式，则在返回结果中显示错误详情信息
