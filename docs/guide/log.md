@@ -15,6 +15,9 @@
 logger.LogErrorIf(errors.New("没有权限"))
 // output：2022-03-18 01:23:33     ERROR   cache/redis_driver.go:53        Error Occurred: {"error": "没有权限"}
 
+logger.LogFatalIf(errors.New("没有权限"))
+// output：2022-03-18 01:23:33     FATAL   cache/redis_driver.go:53        Error Occurred: {"error": "没有权限"}
+
 logger.LogWarnIf(errors.New("没有权限"))
 // output：2022-03-18 01:26:21     WARN    cache/redis_driver.go:53        Error Occurred: {"error": "没有权限"}
 
