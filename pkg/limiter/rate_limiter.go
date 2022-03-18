@@ -9,7 +9,6 @@ import (
 	limiterLib "github.com/ulule/limiter/v3"
 	limiterRedis "github.com/ulule/limiter/v3/drivers/store/redis"
 
-	"gin-biz-web-api/pkg/config"
 	"gin-biz-web-api/pkg/logger"
 	"gin-biz-web-api/pkg/redis"
 )
@@ -59,7 +58,7 @@ func CheckRate(c *gin.Context, key, formatted string) (limiterLib.Context, error
 	store, err := limiterRedis.NewStoreWithOptions(
 		redis.Instance().Client, // 将我们自定义的 redis 客户端连接绑定到 limiter 存储驱动上
 		limiterLib.StoreOptions{
-			Prefix: config.GetString("app.name") + ":limiter", // 设置限流器的缓存前缀
+			Prefix: redis.GenNamespace("limiter"), // 设置限流器的缓存前缀
 		},
 	)
 	if err != nil {
