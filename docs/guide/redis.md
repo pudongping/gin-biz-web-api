@@ -10,11 +10,16 @@
 
 ```go
 
+// 使用默认连接操作 redis
 // 设置一个 key
 redis.Set("name", "alex", 0)
-
 // 取一个值
 name := redis.Get("name")
+
+// 使用 `cache` 连接操作 redis
+redis.Set("age", 18, 0, "cache")
+age := redis.Get("age", "cache")
+fmt.Printf("age is %v \n", age)
 
 // 递增
 // 默认步长为 1
@@ -29,9 +34,13 @@ redis.Increment("num")
 redis.Increment("num", 3)
 redis.Increment("num", 5, "cache")
 
+// 是否存在某个 key
+isExists := redis.Exists("num")
+fmt.Println(isExists)
+
 // 清空数据库中所有的数据
 // 会清空 redis 连接当前库中所有的数据，这是一个危险⚠️操作！
-// 比如，此时 redis 连接的是 db2 那么则会清空 db2 中所有的 key
+// 比如，此时 redis 连接的是 db2 那么则会清空 db2 中**所有**的 key
 redis.FlushDB()
 
 ```
