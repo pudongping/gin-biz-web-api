@@ -43,6 +43,7 @@ func Connect(dbConfig gorm.Dialector, lg gormLogger.Interface) {
 // most dangerous !!!
 func DropAllTables() error {
 	var err error
+	console.Danger("Most dangerous!")
 
 	switch config.GetString("database.driver") {
 	case "mysql":
