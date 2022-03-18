@@ -155,6 +155,15 @@ func LogErrorIf(err error) {
 	}
 }
 
+// LogFatalIf 当 err != nil 时记录 fatal 等级的日志（有调用堆栈信息）
+// eg：logger.LogFatalIf(errors.New("没有权限"))
+// output：2022-03-18 01:23:33     FATAL   cache/redis_driver.go:53        Error Occurred: {"error": "没有权限"}
+func LogFatalIf(err error) {
+	if err != nil {
+		Logger.Fatal("Error Occurred:", zap.Error(err))
+	}
+}
+
 // LogWarnIf 当 err != nil 时记录 warning 等级的日志
 // eg：logger.LogWarnIf(errors.New("没有权限"))
 // output：2022-03-18 01:26:21     WARN    cache/redis_driver.go:53        Error Occurred: {"error": "没有权限"}
