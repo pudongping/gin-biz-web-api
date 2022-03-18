@@ -27,7 +27,7 @@ func NewCaptcha() *Captcha {
 		// 使用 redis 作为存储图像验证码的存储驱动
 		store := RedisDriver{
 			RedisClient: redis.Instance(), // 使用默认的 config/redis.go 中的 default 配置连接
-			KeyPrefix:   config.GetString("app.name") + ":captcha:",
+			KeyPrefix:   "captcha:",
 			Group:       "default", // 使用默认的 config/redis.go 中的 default 配置连接
 		}
 
