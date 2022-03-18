@@ -13,8 +13,8 @@ func Success(format string, v ...interface{}) {
 	colorOut("green", format, v...)
 }
 
-// Error 打印一条报错消息，红色输出
-func Error(format string, v ...interface{}) {
+// Danger 打印一条报错消息，红色输出
+func Danger(format string, v ...interface{}) {
 	colorOut("red", format, v...)
 }
 
@@ -30,7 +30,7 @@ func Info(format string, v ...interface{}) {
 
 // Exit 打印一条报错消息，并退出 os.Exit(1)
 func Exit(format string, v ...interface{}) {
-	Error(format, v...)
+	Danger(format, v...)
 	os.Exit(1)
 }
 
