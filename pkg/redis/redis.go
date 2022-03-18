@@ -87,8 +87,7 @@ func NewClient(address, username, password string, db int) *RdsClient {
 
 	// 测试一下连接是否正常
 	err := rds.Ping()
-	logger.LogErrorIf(err)
-	console.ExitIf(err)
+	logger.LogFatalIf(err)
 
 	return rds
 }
@@ -99,16 +98,20 @@ func (r RdsClient) Ping() error {
 	return err
 }
 
-// genNamespace 获取 redis 的命名空间
-func genNamespace() string {
+// GetNamespace 获取 redis 的命名空间
+func GetNamespace() string {
 	return config.GetString("app.name") + ":"
+}
+
+// GenNamespace 生成带有命名空间前缀的 key
+func GenNamespace(key string) string {
+	return GetNamespace() + key
 }
 
 // Set 存储 key 对应的 value，且设置 expiration 过期时间
 func Set(key string, value interface{}, expiration time.Duration, group ...string) bool {
 	instance := Instance(group...)
-	key = genNamespace() + key
-	if err := instance.Client.Set(instance.Context, key, value, expiration).Err(); err != nil {
+	if err := instance.Client.Set(instance.Context, GenNamespace(key), value, expiration).Err(); err != nil {
 		logger.ErrorString("Redis", "Set", err.Error())
 		return false
 	}
@@ -118,8 +121,7 @@ func Set(key string, value interface{}, expiration time.Duration, group ...strin
 // Get 获取 key 对应的 value
 func Get(key string, group ...string) string {
 	instance := Instance(group...)
-	key = genNamespace() + key
-	result, err := instance.Client.Get(instance.Context, key).Result()
+	result, err := instance.Client.Get(instance.Context, GenNamespace(key)).Result()
 	if err != nil {
 		if err != redis.Nil {
 			logger.ErrorString("Redis", "Get", err.Error())
@@ -141,8 +143,7 @@ func Exists(key string, group ...string) bool {
 // 原本可以支持多个 key 传参，但因这里需要兼容配置组，因此只允许一个一个的 key 删除
 func Del(key string, group ...string) bool {
 	instance := Instance(group...)
-	key = genNamespace() + key
-	if err := instance.Client.Del(instance.Context, key).Err(); err != nil {
+	if err := instance.Client.Del(instance.Context, GenNamespace(key)).Err(); err != nil {
 		logger.ErrorString("Redis", "Del", err.Error())
 		return false
 	}
@@ -151,6 +152,7 @@ func Del(key string, group ...string) bool {
 
 // FlushDB 清空指定 redis db 里的所有数据
 func FlushDB(group ...string) bool {
+	console.Danger("Dangerous operation! All data in the database will be emptied!")
 	instance := Instance(group...)
 	if err := instance.Client.FlushDB(instance.Context).Err(); err != nil {
 		logger.ErrorString("Redis", "FlushDB", err.Error())
@@ -164,8 +166,7 @@ func Increment(parameters ...interface{}) bool {
 	if len(parameters) < 1 {
 		return false
 	}
-	namespace := genNamespace()
-	key := namespace + cast.ToString(parameters[0])
+	key := GenNamespace(cast.ToString(parameters[0]))
 	switch len(parameters) {
 	case 1:
 		// 只有一个参数时，第一个参数为 key
@@ -190,7 +191,7 @@ func Increment(parameters ...interface{}) bool {
 			return false
 		}
 	default:
-		logger.ErrorString("Redis", "Increment", "参数不能为空或者过多")
+		logger.ErrorString("Redis", "Increment", "参数过多")
 		return false
 	}
 	return true
@@ -201,8 +202,7 @@ func Decrement(parameters ...interface{}) bool {
 	if len(parameters) < 1 {
 		return false
 	}
-	namespace := genNamespace()
-	key := namespace + cast.ToString(parameters[0])
+	key := GenNamespace(cast.ToString(parameters[0]))
 	switch len(parameters) {
 	case 1:
 		// 只有一个参数时，第一个参数为 key
