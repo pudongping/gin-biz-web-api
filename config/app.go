@@ -39,6 +39,7 @@ func init() {
 			// 是否进入调试模式
 			"debug": config.Get("App.Debug", false),
 
+			// 当前项目的访问地址
 			"url": config.Get("App.Url", "http://localhost"),
 
 			// 项目运行环境，支持 local、dev、test、prod
