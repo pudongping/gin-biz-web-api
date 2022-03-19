@@ -12,6 +12,7 @@ import (
 	"time"
 
 	"gin-biz-web-api/pkg/helper"
+	"gin-biz-web-api/pkg/helper/strx"
 )
 
 // IsExists 检查目录或者文件是否存在
@@ -35,8 +36,8 @@ func NameWithoutExtension(fileName string) string {
 func GenNewFileName(filename string) string {
 	ext := path.Ext(filename)              // 获取文件后缀
 	name := NameWithoutExtension(filename) // 只有文件名，没有后缀
-	// 将原始文件名加密成 md5 然后拼接当前时间作为新的文件名
-	newName := helper.EncodeMD5(name) + "-" + time.Now().Format("20060102150405")
+	// 将原始文件名加密成 md5 然后拼接当前时间和随机字符串作为新的文件名
+	newName := strx.StrRandomString(8) + "-" + helper.EncodeMD5(name) + "-" + time.Now().Format("20060102150405")
 
 	// 新的文件名称
 	return newName + ext

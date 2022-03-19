@@ -15,7 +15,6 @@ import (
 	"gin-biz-web-api/pkg/app"
 	"gin-biz-web-api/pkg/config"
 	"gin-biz-web-api/pkg/file"
-	"gin-biz-web-api/pkg/helper/strx"
 	"gin-biz-web-api/pkg/logger"
 )
 
@@ -139,7 +138,7 @@ func TailoringImage(fileType FileType, fileHeader *multipart.FileHeader, src str
 	resize := imaging.Thumbnail(img, width, height, imaging.Lanczos)
 
 	// 重新生成文件名 eg：`PqOem-c20ad4d76fe97759aa27a0c99bff6710-20220319015124.jpg`
-	fileName := strx.StrRandomString(5) + "-" + file.GenNewFileName(fileHeader.Filename)
+	fileName := file.GenNewFileName(fileHeader.Filename)
 	publicPath := config.GetString("upload.save_path")                                      // `public/uploads`
 	dirName := fmt.Sprintf("%s/%s", fileType, app.TimeNowInTimezone().Format("2006/01/02")) // `image/2022/03/19`
 
