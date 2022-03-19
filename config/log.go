@@ -23,6 +23,7 @@ func init() {
 			"type": config.Get("Log.Type", "single"),
 
 			/* ------------------ 滚动日志配置 ------------------ */
+			// document link：https://github.com/natefinch/lumberjack/tree/v2.1
 			// 日志文件路径
 			"filename": config.Get("Log.Filename", "storage/logs/logs.log"),
 			// 每个日志文件保存的最大尺寸 单位：M

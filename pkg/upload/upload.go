@@ -1,3 +1,4 @@
+// 上传
 package upload
 
 import (
@@ -77,11 +78,10 @@ func SaveUploadFile(fileType FileType, files multipart.File, fileHeader *multipa
 
 	// http://localhost:3000/static/image/2022/03/19/c20ad4d76fe97759aa27a0c99bff6710-20220319023344.jpg
 	accessUrl := fmt.Sprintf(
-		"%s%s/%s/%s",
-		config.GetString("app.url"),                        // `http://localhost:3000`
-		config.GetString("upload.static_fs_relative_path"), // `/static`
-		dirName,                                            // `image/2022/03/19`
-		fileName,                                           // `c20ad4d76fe97759aa27a0c99bff6710-20220319023344.jpg`
+		"%s/%s/%s",
+		app.URL(config.GetString("upload.static_fs_relative_path")), // `http://localhost:3000/static`
+		dirName,                                                     // `image/2022/03/19`
+		fileName,                                                    // `c20ad4d76fe97759aa27a0c99bff6710-20220319023344.jpg`
 	)
 
 	return &FileInfo{
@@ -120,6 +120,11 @@ func SaveUploadAvatar(files multipart.File, fileHeader *multipart.FileHeader) (*
 }
 
 // TailoringImage 裁剪图片
+// fileType 文件类型
+// fileHeader
+// src 原图片路径，相对项目的绝对路径 eg：`public/uploads/image/2022/03/19/c20ad4d76fe97759aa27a0c99bff6710-20220319015124.jpg`
+// width 所需要裁剪的宽度
+// height 所需要裁剪的高度
 func TailoringImage(fileType FileType, fileHeader *multipart.FileHeader, src string, width, height int) (*FileInfo, error) {
 
 	var fileInfo FileInfo
@@ -138,7 +143,7 @@ func TailoringImage(fileType FileType, fileHeader *multipart.FileHeader, src str
 	publicPath := config.GetString("upload.save_path")                                      // `public/uploads`
 	dirName := fmt.Sprintf("%s/%s", fileType, app.TimeNowInTimezone().Format("2006/01/02")) // `image/2022/03/19`
 
-	// 保存路径 eg：`public/uploads/image/2022/03/19/c20ad4d76fe97759aa27a0c99bff6710-20220319015124.jpg`
+	// 保存路径 eg：`public/uploads/image/2022/03/19/PqOem-c20ad4d76fe97759aa27a0c99bff6710-20220319015124.jpg`
 	filePath := fmt.Sprintf("%s/%s/%s", publicPath, dirName, fileName)
 
 	// 保存文件到指定路径
@@ -147,13 +152,12 @@ func TailoringImage(fileType FileType, fileHeader *multipart.FileHeader, src str
 		return nil, err
 	}
 
-	// http://localhost:3000/static/image/2022/03/19/c20ad4d76fe97759aa27a0c99bff6710-20220319023344.jpg
+	// http://localhost:3000/static/image/2022/03/19/PqOem-c20ad4d76fe97759aa27a0c99bff6710-20220319023344.jpg
 	accessUrl := fmt.Sprintf(
-		"%s%s/%s/%s",
-		config.GetString("app.url"),                        // `http://localhost:3000`
-		config.GetString("upload.static_fs_relative_path"), // `/static`
-		dirName,                                            // `image/2022/03/19`
-		fileName,                                           // `c20ad4d76fe97759aa27a0c99bff6710-20220319023344.jpg`
+		"%s/%s/%s",
+		app.URL(config.GetString("upload.static_fs_relative_path")), // `http://localhost:3000/static`
+		dirName,                                                     // `image/2022/03/19`
+		fileName,                                                    // `PqOem-c20ad4d76fe97759aa27a0c99bff6710-20220319023344.jpg`
 	)
 
 	fileInfo.OriginFileName = fileHeader.Filename
