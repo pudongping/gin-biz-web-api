@@ -93,6 +93,7 @@ func SaveUploadFile(fileType FileType, files multipart.File, fileHeader *multipa
 
 }
 
+// SaveUploadAvatar 上传头像
 func SaveUploadAvatar(files multipart.File, fileHeader *multipart.FileHeader) (*FileInfo, error) {
 
 	// 先按照正常的流程上传头像图片
@@ -118,6 +119,7 @@ func SaveUploadAvatar(files multipart.File, fileHeader *multipart.FileHeader) (*
 	return resizeFileInfo, nil
 }
 
+// TailoringImage 裁剪图片
 func TailoringImage(fileType FileType, fileHeader *multipart.FileHeader, src string, width, height int) (*FileInfo, error) {
 
 	var fileInfo FileInfo
