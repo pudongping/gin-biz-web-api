@@ -27,7 +27,7 @@ func AuthJWT() gin.HandlerFunc {
 		// jwt 解析成功，设置用户信息
 		user := user_model.GetOne(claims.UserID)
 		if user.ID == 0 {
-			response.ToErrorResponse(errcode.NotFound.Msgf("用户"))
+			response.ToErrorResponse(errcode.Unauthorized)
 			return
 		}
 
