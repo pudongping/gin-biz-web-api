@@ -69,5 +69,15 @@ func CheckRate(c *gin.Context, key, formatted string) (limiterLib.Context, error
 	instance := limiterLib.New(store, rate)
 
 	// 获取限流处理结果
-	return instance.Get(c, key)
+	if c.GetBool("rate-limiter-once") {
+		// Peek() 取结果，不增加访问次数
+		return instance.Peek(c, key)
+	} else {
+		// 确保多个路由组里调用 LimitIP 进行限流时，只增加一次访问次数
+		c.Set("rate-limiter-once", true)
+
+		// Get() 取结果且增加访问次数
+		return instance.Get(c, key)
+	}
+
 }

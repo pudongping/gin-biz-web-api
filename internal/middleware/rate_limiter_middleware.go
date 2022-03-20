@@ -54,6 +54,9 @@ func LimitRoute(limit string) gin.HandlerFunc {
 
 	return func(c *gin.Context) {
 
+		// 针对单个路由，增加访问次数
+		c.Set("rate-limiter-once", false)
+
 		// 针对 IP 加路由进行限流
 		key := limiter.GetKeyRouteWithIP(c)
 		if ok := handlerLimit(c, key, limit); !ok {

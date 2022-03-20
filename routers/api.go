@@ -31,6 +31,7 @@ func RegisterAPIRoutes(r *gin.Engine) {
 	apiExample(api)
 
 	userGroup := api.Group("/user")
+	userGroup.Use(middleware.LimitIP("1000-H"))
 
 	{
 		userCtrl := new(controller.UserController)
