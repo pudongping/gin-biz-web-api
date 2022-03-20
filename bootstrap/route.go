@@ -10,6 +10,8 @@ import (
 	"gin-biz-web-api/internal/middleware"
 	"gin-biz-web-api/pkg/config"
 	"gin-biz-web-api/pkg/console"
+	"gin-biz-web-api/pkg/errcode"
+	"gin-biz-web-api/pkg/responses"
 	"gin-biz-web-api/routers"
 )
 
@@ -43,17 +45,20 @@ func registerGlobalMiddleWare(router *gin.Engine) {
 func setup404Handler(router *gin.Engine) {
 	// 处理 404 请求
 	router.NoRoute(func(c *gin.Context) {
+
+		// 避免请求网站图标出现 404
+		if strings.HasPrefix(c.Request.URL.Path, "/favicon.ico") {
+			return
+		}
+
 		// 获取标头信息的 Accept 信息
 		acceptString := c.Request.Header.Get("Accept")
 		if strings.Contains(acceptString, "text/html") {
 			// 如果是 html 的话
-			c.String(http.StatusNotFound, "页面无法找到")
+			c.String(http.StatusNotFound, "页面无法找到 ...(｡•ˇ‸ˇ•｡) ...")
 		} else {
 			// 默认返回 json 格式
-			c.JSON(http.StatusNotFound, gin.H{
-				"code": http.StatusNotFound,
-				"msg":  "路由未定义",
-			})
+			responses.New(c).ToErrorResponse(errcode.NotFound, "路由未定义")
 		}
 	})
 }
