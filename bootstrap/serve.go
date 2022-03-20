@@ -31,7 +31,7 @@ func RunServer() {
 	setupRoute(router)
 	// 运行服务器
 	srv := initServer(router)
-	console.Success("App Server is running at: http://0.0.0.0:%d", config.GetInt("app.port"))
+	console.Success("Http Server is running at: http://0.0.0.0:%d", config.GetInt("app.port"))
 	// 优雅的重启和停止
 	gracefulShutdown(srv)
 }
