@@ -42,3 +42,33 @@ func TimeNowInTimezone() time.Time {
 func URL(path string) string {
 	return config.GetString("app.url") + path
 }
+
+// RemoveQueryKey 移除 uri 中的某个参数
+// eg：
+// query = `aa=11&bb=22`
+// keys = []string{aa}
+// return = `bb=22`
+func RemoveQueryKey(query string, keys []string) string {
+	// 切割出所有的参数
+	l := strings.Split(query, "&")
+	var n []string
+
+	for _, v := range l {
+		for _, key := range keys {
+			if !strings.HasPrefix(v, key) {
+				n = append(n, v)
+			}
+		}
+	}
+
+	// 组合新参数
+	var s string
+	for _, v := range n {
+		s = s + "&" + v
+	}
+
+	// 去除掉最前面的 `&`
+	s = strings.TrimPrefix(s, "&")
+
+	return s
+}
