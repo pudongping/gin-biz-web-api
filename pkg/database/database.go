@@ -2,7 +2,6 @@ package database
 
 import (
 	"database/sql"
-	"fmt"
 
 	"gorm.io/gorm"
 	gormLogger "gorm.io/gorm/logger"
@@ -55,21 +54,32 @@ func DropAllTables() error {
 	return err
 }
 
-// dropMysqlDatabase 删除数据库
+// dropMysqlDatabase 删除数据表
 func dropMysqlDatabase() error {
 	dbname := CurrentDatabase()
-	s := fmt.Sprintf("drop database %s;", dbname)
-	if err := DB.Exec(s).Error; err != nil {
+	var tables []string
+
+	// 读取所有数据表
+	err := DB.Table("information_schema.tables").
+		Where("table_schema = ?", dbname).
+		Pluck("table_name", &tables).
+		Error
+	if err != nil {
 		return err
 	}
-	s = fmt.Sprintf("create database %s default charset utf8mb4 collate utf8mb4_general_ci;", dbname)
-	if err := DB.Exec(s).Error; err != nil {
-		return err
+
+	// 暂时关闭外键检测
+	DB.Exec("SET foreign_key_checks = 0;")
+
+	// 删除所有表
+	for _, table := range tables {
+		if err := DB.Migrator().DropTable(table); err != nil {
+			return err
+		}
 	}
-	s = fmt.Sprintf("use %s;", dbname)
-	if err := DB.Exec(s).Error; err != nil {
-		return err
-	}
+
+	// 开启 MySQL 外键检测
+	DB.Exec("SET foreign_key_checks = 1;")
 	return nil
 }
 
