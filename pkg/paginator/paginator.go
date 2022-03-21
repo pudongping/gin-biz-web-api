@@ -9,7 +9,6 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/spf13/cast"
 	"gorm.io/gorm"
-	"gorm.io/gorm/clause"
 
 	"gin-biz-web-api/pkg/app"
 	"gin-biz-web-api/pkg/config"
@@ -60,13 +59,13 @@ func Paginate(c *gin.Context, db *gorm.DB, data interface{}, perPage ...int) Pag
 	// 初始化分页所需要使用到的属性值
 	p.initProperties(perPage...)
 
-	p.query = p.query.Preload(clause.Associations) // 读取关联
+	// p.query = p.query.Preload(clause.Associations) // 预加载全部关联
 	// 排序
 	for k := range p.SortColumn {
 		p.query = p.query.Order(fmt.Sprintf("%s %s", p.SortColumn[k], p.SortRules[k]))
 	}
 
-	if err := p.query.Offset(p.Offset).Limit(p.PerPage).Find(data).Error; err != nil {
+	if err := p.query.Limit(p.PerPage).Offset(p.Offset).Find(data).Error; err != nil {
 		// 数据库出错
 		logger.LogErrorIf(err)
 		return Pagination{}
@@ -179,8 +178,10 @@ func (p *Paginator) getOrderBy() (sortColumn []string, sortRules []string) {
 // getTotalCount 获取数据总条数
 func (p *Paginator) getTotalCount() int {
 	var count int64
+	newQuery := *p
 
-	if err := p.query.Count(&count).Error; err != nil {
+	// 获取数据总条数的时候不应该出现 order 、limit、offset
+	if err := newQuery.query.Offset(-1).Limit(-1).Count(&count).Error; err != nil {
 		return 0
 	}
 
