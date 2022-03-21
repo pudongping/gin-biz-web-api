@@ -54,7 +54,8 @@ func Recovery() gin.HandlerFunc {
 					zap.Time("time", time.Now()),               // 记录时间
 					zap.Any("error", err),                      // 记录错误信息
 					zap.String("request", string(httpRequest)), // 请求信息
-					zap.Stack("stacktrace"),                    // 调用堆栈信息
+					// fmt.Println(zap.Stack("stacktrace").String)  // 可以打印出调用堆栈信息
+					zap.Stack("stacktrace"), // 调用堆栈信息
 				)
 
 				// 返回 500 状态码
