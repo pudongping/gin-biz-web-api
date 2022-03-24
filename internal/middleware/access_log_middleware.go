@@ -91,15 +91,8 @@ func AccessLog() gin.HandlerFunc {
 		// 响应的内容
 		logFields = append(logFields, zap.String("response_body", responseBodyWriter.body.String()))
 
-		if responseStatus > 400 && responseStatus <= 499 {
-			// 除了 StatusBadRequest 以外，warning 提示一下，常见的有 403 404，开发时都要注意
-			logger.Warn("HTTP Warning [ "+cast.ToString(responseStatus)+" ]", logFields...)
-		} else if responseStatus >= 500 && responseStatus <= 599 {
-			// 除了内部错误，记录 error
-			logger.Error("HTTP Error [ "+cast.ToString(responseStatus)+" ]", logFields...)
-		} else {
-			logger.Debug("HTTP Access Log", logFields...)
-		}
+		// 记录访问日志
+		logger.Info("HTTP Access Log [ "+cast.ToString(responseStatus)+" ]", logFields...)
 
 	}
 }
