@@ -36,10 +36,17 @@ func (e *Error) Msg() string {
 	return e.msg
 }
 
-// Msgf 覆写错误提示信息
+// Msgf 覆写错误提示信息中的占位符
 func (e *Error) Msgf(args ...interface{}) *Error {
 	newError := *e
 	newError.msg = fmt.Sprintf(e.msg, args...)
+	return &newError
+}
+
+// Msgr 重写错误提示信息
+func (e *Error) Msgr(msg string) *Error {
+	newError := *e
+	newError.msg = msg
 	return &newError
 }
 
