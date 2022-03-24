@@ -3,12 +3,12 @@ package responses
 
 import (
 	"net/http"
-	"sort"
 
 	"github.com/gin-gonic/gin"
 
 	"gin-biz-web-api/pkg/app"
 	"gin-biz-web-api/pkg/errcode"
+	"gin-biz-web-api/pkg/helper/mapx"
 	"gin-biz-web-api/pkg/logger"
 )
 
@@ -88,23 +88,16 @@ func (r *Response) ToErrorValidateResponse(err *errcode.Error, errors map[string
 	response := gin.H{"code": err.Code(), "msg": err.Msg()}
 
 	if len(errors) > 0 {
+		ks := mapx.SortAscKeyString(errors)
 
-		var kSlice []string
-		for k := range errors {
-			kSlice = append(kSlice, k)
-		}
-
-		sort.Strings(kSlice)
-
-		for _, kk := range kSlice {
-			response["msg"] = errors[kk][0]
+		for _, k := range ks {
+			response["msg"] = errors[k][0]
 			break
 		}
 
 		if r.isShowDetails() {
 			response["details"] = errors
 		}
-
 	}
 
 	r.Ctx.AbortWithStatusJSON(err.HttpStatusCode(), response)
