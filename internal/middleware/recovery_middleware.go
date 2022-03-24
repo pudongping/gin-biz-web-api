@@ -59,7 +59,7 @@ func Recovery() gin.HandlerFunc {
 				)
 
 				// 返回 500 状态码
-				responses.New(c).ToErrorResponse(errcode.InternalServerError)
+				responses.New(c).ToErrorResponse(errcode.InternalServerError.WithDetails(err.(error).Error()))
 				c.Abort()
 			}
 		}()
