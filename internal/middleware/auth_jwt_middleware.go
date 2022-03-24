@@ -20,14 +20,14 @@ func AuthJWT() gin.HandlerFunc {
 
 		// jwt 解析失败
 		if err != nil {
-			response.ToErrorResponse(errcode.BadRequest.WithDetails(err.Error()))
+			response.ToErrorResponse(errcode.BadRequest.WithDetails(err.Error()), err.Error())
 			return
 		}
 
 		// jwt 解析成功，设置用户信息
 		user := user_model.GetOne(claims.UserID)
 		if user.ID == 0 {
-			response.ToErrorResponse(errcode.Unauthorized)
+			response.ToErrorResponse(errcode.Unauthorized, "找不到对应用户")
 			return
 		}
 
