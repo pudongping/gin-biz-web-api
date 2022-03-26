@@ -1,8 +1,8 @@
 App:
-  Name: gin-biz-web-api
-  Env: local
+  Name: gin-biz-web-api # 项目名称，会在缓存中用到
+  Env: local # 当前项目运行环境
   Debug: true # 只有开启 debug 模式时，日志记录才会有换行且高亮
-  Url: http://localhost:8000
+  Url: http://localhost:3000 # http 服务的访问地址
   Port: 3000 # 默认的 HTTP 监听端口
   GinRunMode: debug # 设置 gin 框架的运行模式
   ContextTimeout: 60 # 上下文超时时间，单位：s
@@ -12,26 +12,13 @@ JWT:
   Key: zBqYyQrPNaIUsnRhsGtHLivjqiMjBVLS # 加密 key
   ExpireTime: 120 # jwt 过期时间，单位：min
   MaxRefreshTime: 86400 # 允许刷新时间，单位：min
-
-Server: # 服务配置
-  RunMode: debug  # 设置 gin 的运行模式
-  HttpPort: 8000  # 默认的 HTTP 监听端口
-  ReadTimeout: 60  # 允许读取的最大持续时间
-  WriteTimeout: 60  # 允许写入的最大持续时间
-Apps: # 应用配置
-  DefaultPageSize: 10  # 设置默认每页数量
-  MaxPageSize: 100  # 所允许的最大每页数量
-  DefaultContextTimeout: 60
-  LogSavePath: storage/logs  # 默认的应用日志存储路径
-  LogFileName: app
-  LogFileExt: .log
-  UploadSavePath: public/uploads  # 上传文件的最终保存目录
-  UploadServerUrl: http://127.0.0.1:8000/static  # 上传文件后的用于展示的文件服务地址
-  UploadImageMaxSize: 5  # 上传文件所允许的最大空间大小（MB）
-  UploadImageAllowExts: # 上传文件所允许的文件后缀
-    - .jpg
-    - .jpeg
-    - .png
+Email:
+  Host: smtp.qq.com
+  Port: 465
+  UserName: 123@qq.com
+  Password: xxx
+  FromAddress: 123@qq.com
+  FromName: alex
 DB:
   Driver: mysql
   Host: 127.0.0.1
