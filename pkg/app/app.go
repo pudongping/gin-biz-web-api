@@ -4,6 +4,8 @@ import (
 	"strings"
 	"time"
 
+	"github.com/shirou/gopsutil/host"
+
 	"gin-biz-web-api/pkg/config"
 )
 
@@ -71,4 +73,13 @@ func RemoveQueryKey(query string, keys []string) string {
 	s = strings.TrimPrefix(s, "&")
 
 	return s
+}
+
+// GetOSName 获取系统名称，eg：darwin （全小写）
+func GetOSName() string {
+	platform, _, _, err := host.PlatformInformation()
+	if err != nil {
+		return ""
+	}
+	return platform
 }
