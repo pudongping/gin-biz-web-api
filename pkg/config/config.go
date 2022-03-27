@@ -38,7 +38,7 @@ func init() {
 // NewConfig 初始化配置信息
 func NewConfig(env string, configs ...string) {
 
-	fileName := fetchConfigFile(env) // 根据环境变量 env 获取对应的配置文件名称（不带文件后缀）
+	fileName := FetchConfigFile(env) // 根据环境变量 env 获取对应的配置文件名称（不带文件后缀）
 	vp.SetConfigName(fileName)       // 设置配置文件的名称为 config
 
 	for _, config := range configs {
@@ -46,7 +46,7 @@ func NewConfig(env string, configs ...string) {
 
 			configFile := config + fileName + ".yaml"
 			if _, ok := file.IsExists(configFile); !ok {
-				console.Exit("配置文件 [%s] 不存在！", configFile)
+				console.Exit("[%s] configuration file does not exist!", configFile)
 			}
 
 			// 设置配置文件路径为相对路径，相对于 main.go 比如：vp.AddConfigPath("config/")
@@ -62,8 +62,8 @@ func NewConfig(env string, configs ...string) {
 	loadConfig()
 }
 
-// fetchConfigFile 根据环境变量加载对应的配置文件
-func fetchConfigFile(env string) string {
+// FetchConfigFile 根据环境变量加载对应的配置文件
+func FetchConfigFile(env string) string {
 	// 如果没设置环境变量，那么默认使用【etc/config.yaml 配置文件】
 	if env == "" {
 		return "config"
