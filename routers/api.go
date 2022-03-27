@@ -24,21 +24,12 @@ func RegisterAPIRoutes(r *gin.Engine) {
 	// 作为参考 Github API 每小时最多 60 个请求（根据 IP）
 	api.Use(middleware.LimitIP("200-H"))
 
+	// 测试
+	apiTest(api)
 	// 授权相关
 	apiAuth(api)
-
 	// 示例文件
 	apiExample(api)
-
-	userGroup := api.Group("/user")
-	userGroup.Use(middleware.LimitIP("1000-H"))
-
-	{
-		userCtrl := new(controller.UserController)
-		userGroup.GET("", middleware.LimitRoute("30-H"), userCtrl.Index)
-		userGroup.POST("", middleware.LimitRoute("30-H"), userCtrl.Index)
-		userGroup.GET("test", userCtrl.Test)
-	}
 
 }
 
@@ -51,14 +42,26 @@ func setStaticURL(r *gin.Engine) {
 	r.StaticFS(config.GetString("upload.static_fs_relative_path"), http.Dir(config.GetString("upload.save_path")))
 }
 
+func apiTest(api *gin.RouterGroup) {
+	testGroup := api.Group("/test")
+
+	testCtrl := new(controller.TestController)
+	testGroup.GET("", testCtrl.Test)  // 测试
+	testGroup.POST("", testCtrl.Test) // 测试
+
+}
+
 func apiAuth(api *gin.RouterGroup) {
 	authGroup := api.Group("/auth")
-
+	authGroup.Use(middleware.LimitIP("60-H"))
 	{
-		rgsCtrl := new(auth_ctrl.RegisterController)
-		authGroup.POST("/register/using-email", rgsCtrl.SignupUsingEmail) // 使用邮箱注册用户
-	}
+		registerCtrl := new(auth_ctrl.RegisterController)
+		authGroup.POST("/register/using-email", middleware.LimitRoute("30-H"), registerCtrl.SignupUsingEmail) // 使用邮箱注册用户
 
+		userCtrl := new(auth_ctrl.UserController)
+		authGroup.GET("/user", userCtrl.Index)                       // 用户列表
+		authGroup.GET("/me", middleware.AuthJWT(), userCtrl.Profile) // 用户个人信息
+	}
 }
 
 func apiExample(api *gin.RouterGroup) {
@@ -76,5 +79,8 @@ func apiExample(api *gin.RouterGroup) {
 		uploadCtrl := new(example_ctrl.UploadController)
 		exampleGroup.POST("/upload-file", uploadCtrl.UploadFile)     // 上传文件
 		exampleGroup.POST("/upload-avatar", uploadCtrl.UploadAvatar) // 上传用户头像
+
+		pagerCtrl := new(example_ctrl.PagerController)
+		exampleGroup.GET("/pager", pagerCtrl.Pager) // 数据分页演示
 	}
 }
