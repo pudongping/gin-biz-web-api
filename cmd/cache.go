@@ -23,12 +23,14 @@ var cacheClearCmd = &cobra.Command{
 	Run:   runCacheClear,
 }
 
+// cacheForgetCmd 删除缓存中的某个 key
 var cacheForgetCmd = &cobra.Command{
 	Use:   "forget",
 	Short: "Delete cache key, eg: cache forget cache-key",
 	Run:   runCacheForget,
 }
 
+// cacheGetCmd 获取缓存中的某个值
 var cacheGetCmd = &cobra.Command{
 	Use:   "get",
 	Short: "Get cache value, eg: cache get cache-key",
