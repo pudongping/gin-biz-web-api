@@ -16,6 +16,8 @@ var GenerateCmd = &cobra.Command{
 }
 
 // 生成 jwt 的密钥 key
+// eg：go run main.go generate jwt-key
+// output："JWT Key is : FKCCWxhIKXmGKQEaQDrcqbLdkKjKvqRZ"
 var genJwtKeyCmd = &cobra.Command{
 	Use:   "jwt-key",
 	Short: "generate JWT's secret key",
