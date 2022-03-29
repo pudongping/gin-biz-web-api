@@ -10,6 +10,7 @@ import (
 	"gin-biz-web-api/pkg/errcode"
 	"gin-biz-web-api/pkg/helper/mapx"
 	"gin-biz-web-api/pkg/logger"
+	"gin-biz-web-api/pkg/paginator"
 )
 
 type Response struct {
@@ -32,6 +33,14 @@ func (r *Response) ToResponse(data interface{}) {
 	}
 
 	r.Ctx.JSON(http.StatusOK, response)
+}
+
+// ToResponseWithPagination 返回分页数据
+func (r *Response) ToResponseWithPagination(results interface{}, pager paginator.Pagination) {
+	r.ToResponse(gin.H{
+		"results": results,
+		"pager":   pager,
+	})
 }
 
 // ToErrorResponse 错误返回
