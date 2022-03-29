@@ -40,6 +40,17 @@ func TimeNowInTimezone() time.Time {
 	return time.Now().In(chinaTimezone)
 }
 
+// TimeParseInTimezone 解析格式化的字符串并返回它表示的时间值
+// eg：
+// layout := "2006-01-02 15:04:05"
+// inputTime := "2029-09-04 12:02:33"
+// output is："2029-09-04 12:02:33"
+func TimeParseInTimezone(layout, inputTime string) string {
+	chinaTimezone, _ := time.LoadLocation(config.GetString("app.timezone"))
+	t, _ := time.ParseInLocation(layout, inputTime, chinaTimezone)
+	return time.Unix(t.Unix(), 0).In(chinaTimezone).Format(layout)
+}
+
 // URL 拼接站点的 url
 func URL(path string) string {
 	return config.GetString("app.url") + path
