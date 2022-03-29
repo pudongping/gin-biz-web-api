@@ -23,6 +23,7 @@ func init() {
 			"max_size": config.Get("Upload.MaxSize", 5),
 
 			// 上传图片时的配置项
+			// 其实上传图片也是文件上传的一种类型，但是也有可能是需要对图片进行裁剪之类的操作的，故另起了一个配置
 			"image": map[string]interface{}{
 				// 上传图片时，允许上传的最大空间大小，不设置时，会使用 upload.max_size 配置
 				"max_size": config.Get("Upload.ImageMaxSize"),
@@ -32,7 +33,6 @@ func init() {
 			},
 
 			// 上传文件时的配置项
-			// 其实上传图片也是文件上传的一种类型，但是也有可能是需要对图片进行裁剪之类的操作的，故另起了一个配置
 			"file": map[string]interface{}{
 				// 上传文件时，允许上传的最大空间大小，不设置时，会使用 upload.max_size 配置
 				"max_size": config.Get("Upload.FileMaxSize", 20),
