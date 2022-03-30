@@ -98,6 +98,7 @@ make build-local
 - [go-gomail/gomail](https://github.com/go-gomail/gomail) —— SMTP 邮件发送
 - [disintegration/imaging](https://github.com/disintegration/imaging) —— 图片处理、裁剪用户头像
 - [ulule/limiter](https://github.com/ulule/limiter/v3) —— 接口频率限流器
+- [juju/ratelimit](https://github.com/juju/ratelimit) —— 令牌桶限流器
 - [shirou/gopsutil](https://github.com/shirou/gopsutil) —— 查看系统信息
 
 ## 其他
