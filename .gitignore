@@ -20,3 +20,5 @@ tmp
 .vscode
 *.sublime*
 !.gitkeep
+
+gin-biz-web-api
