@@ -20,6 +20,7 @@ type AccessLogWriter struct {
 	body *bytes.Buffer
 }
 
+// Write 在此方法中实现了双写，因此可以直接通过 `AccessLogWriter.body` 获取到方法返回的响应主体
 func (w AccessLogWriter) Write(p []byte) (int, error) {
 	if n, err := w.body.Write(p); err != nil {
 		return n, err
