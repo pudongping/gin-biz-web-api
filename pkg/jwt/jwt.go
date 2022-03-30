@@ -79,9 +79,10 @@ func (j *JWT) ParseToken(c *gin.Context, userToken ...string) (*JWTCustomClaims,
 	if err != nil {
 		validationErr, ok := err.(*jwtPkg.ValidationError)
 		if ok {
-			if validationErr.Errors == jwtPkg.ValidationErrorMalformed {
+			switch validationErr.Errors {
+			case jwtPkg.ValidationErrorMalformed:
 				return nil, ErrTokenMalformed
-			} else if validationErr.Errors == jwtPkg.ValidationErrorExpired {
+			case jwtPkg.ValidationErrorExpired:
 				return nil, ErrTokenExpired
 			}
 		}
@@ -89,6 +90,8 @@ func (j *JWT) ParseToken(c *gin.Context, userToken ...string) (*JWTCustomClaims,
 	}
 
 	// 将 token 中的 claims 信息解析出来和 JWTCustomClaims 数据结构进行校验
+	// Valid 验证基于时间的声明，例如：过期时间（ExpiresAt）、签发者（Issuer）、生效时间（Not Before），
+	// 需要注意的是，如果没有任何声明在令牌中，仍然会被认为是有效的
 	if claims, ok := token.Claims.(*JWTCustomClaims); ok && token.Valid {
 		return claims, nil
 	}
@@ -176,6 +179,7 @@ func (j *JWT) GenerateToken(userId string) string {
 func (j *JWT) createToken(claims JWTCustomClaims) (string, error) {
 	// 使用 HS256 算法生成的 token
 	tokenClaims := jwtPkg.NewWithClaims(jwtPkg.SigningMethodHS256, claims)
+	// 生成签名字符串
 	return tokenClaims.SignedString(j.Key)
 }
 
@@ -199,6 +203,7 @@ func (j *JWT) expireAtTime() int64 {
 
 // parseTokenString 使用 jwtpkg.ParseWithClaims 解析 Token
 func (j *JWT) parseTokenString(tokenStr string) (*jwtPkg.Token, error) {
+	// ParseWithClaims 用于解析鉴权的声明，方法内部主要是具体的解码和校验的过程，最终返回 *jwtPkg.Token
 	return jwtPkg.ParseWithClaims(tokenStr, &JWTCustomClaims{}, func(token *jwtPkg.Token) (interface{}, error) {
 		return j.Key, nil
 	})
