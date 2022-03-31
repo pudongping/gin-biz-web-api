@@ -14,7 +14,7 @@ func setupConfig() {
 
 	console.Info("init config ...")
 
-	// 触发加载 config 包的所有 init 函数
+	// 触发加载 config 包的所有 init 函数，也可以直接通过匿名加载的方式去触发加载 init 函数
 	config.Initialize()
 
 	// 加载配置文件
