@@ -33,11 +33,11 @@ func NewCaptcha() *Captcha {
 
 		// 配置 base64Captcha 驱动信息
 		driver := base64Captcha.NewDriverDigit(
-			config.GetInt("captcha.height"),       // 验证码图片长度
-			config.GetInt("captcha.width"),        // 验证码图片宽度
-			config.GetInt("captcha.length"),       // 验证码的长度
-			config.GetFloat64("captcha.max_skew"), // 数字的最大倾斜角度
-			config.GetInt("captcha.dot_count"),    // 图片背景里的混淆点数量
+			config.GetInt("cfg.captcha.height"),       // 验证码图片长度
+			config.GetInt("cfg.captcha.width"),        // 验证码图片宽度
+			config.GetInt("cfg.captcha.length"),       // 验证码的长度
+			config.GetFloat64("cfg.captcha.max_skew"), // 数字的最大倾斜角度
+			config.GetInt("cfg.captcha.dot_count"),    // 图片背景里的混淆点数量
 		)
 
 		// 初始化 Captcha 对象
@@ -60,7 +60,7 @@ func (c *Captcha) GenerateCaptcha() (id, b64s string, err error) {
 func (c *Captcha) VerifyCaptcha(id, answer string, isClear ...bool) bool {
 
 	// 方便本地调试
-	if app.IsLocal() && id == config.GetString("captcha.local_key") {
+	if app.IsLocal() && id == config.GetString("cfg.captcha.local_key") {
 		return true
 	}
 

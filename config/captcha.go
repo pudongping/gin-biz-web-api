@@ -6,7 +6,7 @@ import (
 )
 
 func init() {
-	config.Add("captcha", func() map[string]interface{} {
+	config.Add("cfg.captcha", func() map[string]interface{} {
 		return map[string]interface{}{
 
 			// 验证码图片长度

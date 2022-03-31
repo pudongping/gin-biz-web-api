@@ -20,11 +20,11 @@ type RedisDriver struct {
 // Set 实现 base64Captcha.Store interface 的 Set 方法
 func (r *RedisDriver) Set(key, value string) error {
 
-	expireTime := time.Minute * time.Duration(config.GetInt64("captcha.expire_time"))
+	expireTime := time.Minute * time.Duration(config.GetInt64("cfg.captcha.expire_time"))
 
 	// 方便本地开发调试
 	if app.IsLocal() {
-		expireTime = time.Minute * time.Duration(config.GetInt64("captcha.local_expire_time"))
+		expireTime = time.Minute * time.Duration(config.GetInt64("cfg.captcha.local_expire_time"))
 	}
 
 	if ok := redis.Set(r.KeyPrefix+key, value, expireTime, r.Group); !ok {
