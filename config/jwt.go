@@ -6,7 +6,7 @@ import (
 )
 
 func init() {
-	config.Add("jwt", func() map[string]interface{} {
+	config.Add("cfg.jwt", func() map[string]interface{} {
 		return map[string]interface{}{
 
 			// jwt 加密 key

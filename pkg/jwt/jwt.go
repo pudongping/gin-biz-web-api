@@ -50,8 +50,8 @@ type JWTCustomClaims struct {
 
 func NewJWT() *JWT {
 	return &JWT{
-		Key:        []byte(config.GetString("jwt.key")),                                  // 密钥
-		MaxRefresh: time.Duration(config.GetInt64("jwt.max_refresh_time")) * time.Minute, // 允许刷新时间
+		Key:        []byte(config.GetString("cfg.jwt.key")),                                  // 密钥
+		MaxRefresh: time.Duration(config.GetInt64("cfg.jwt.max_refresh_time")) * time.Minute, // 允许刷新时间
 	}
 }
 
@@ -191,9 +191,9 @@ func (j *JWT) expireAtTime() int64 {
 
 	if app.IsLocal() {
 		// 调试模式时，使用调试模式的过期时间
-		expireTime = config.GetInt64("jwt.local_expire_time")
+		expireTime = config.GetInt64("cfg.jwt.local_expire_time")
 	} else {
-		expireTime = config.GetInt64("jwt.expire_time")
+		expireTime = config.GetInt64("cfg.jwt.expire_time")
 	}
 
 	expire := time.Duration(expireTime) * time.Minute
