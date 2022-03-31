@@ -100,6 +100,7 @@ make build-local
 - [ulule/limiter](https://github.com/ulule/limiter/v3) —— 接口频率限流器
 - [juju/ratelimit](https://github.com/juju/ratelimit) —— 令牌桶限流器
 - [shirou/gopsutil](https://github.com/shirou/gopsutil) —— 查看系统信息
+- [fsnotify/fsnotify](https://github.com/fsnotify/fsnotify) —— 配置热更新
 
 ## 其他
 
