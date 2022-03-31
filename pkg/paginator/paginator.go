@@ -104,7 +104,7 @@ func (p *Paginator) getPerPage(perPage ...int) int {
 	var perPageNum int
 
 	// 如果当前的请求地址中已经含有 `per_page` 参数时
-	queryPerPage := p.ctx.Query(config.GetString("paginator.url_query_per_page"))
+	queryPerPage := p.ctx.Query(config.GetString("cfg.paginator.url_query_per_page"))
 	if len(queryPerPage) > 0 {
 		perPageNum = cast.ToInt(queryPerPage)
 	}
@@ -119,7 +119,7 @@ func (p *Paginator) getPerPage(perPage ...int) int {
 		perPageNum = perPage[0]
 	} else {
 		// 使用配置文件中的默认每页显示数
-		perPageNum = config.GetInt("paginator.default_per_page")
+		perPageNum = config.GetInt("cfg.paginator.default_per_page")
 	}
 
 	return perPageNum
@@ -129,7 +129,7 @@ func (p *Paginator) getPerPage(perPage ...int) int {
 func (p *Paginator) getPage() int {
 
 	// 如果当前的请求地址中已经含有 `page` 参数时
-	page := cast.ToInt(p.ctx.Query(config.GetString("paginator.url_query_page")))
+	page := cast.ToInt(p.ctx.Query(config.GetString("cfg.paginator.url_query_page")))
 	if page <= 0 {
 		// 默认为第一页
 		page = 1
@@ -152,7 +152,7 @@ func (p *Paginator) getPage() int {
 func (p *Paginator) getOrderBy() (sortColumn []string, sortRules []string) {
 
 	// eg：id,desc|name,asc
-	queryOrderBy := p.ctx.Query(config.GetString("paginator.url_query_order_by"))
+	queryOrderBy := p.ctx.Query(config.GetString("cfg.paginator.url_query_order_by"))
 
 	if "" == queryOrderBy {
 		return
@@ -215,7 +215,7 @@ func (p *Paginator) formatBaseURL() string {
 	// eg：`aa=11&bb=22&page=3`
 	if query := p.ctx.Request.URL.RawQuery; "" != query {
 		// 从原始链接中去除掉 `page` 参数，因为只有 `page` 参数需要通过程序重新计算返回给客户端
-		if s := app.RemoveQueryKey(query, []string{config.GetString("paginator.url_query_page")}); "" != s {
+		if s := app.RemoveQueryKey(query, []string{config.GetString("cfg.paginator.url_query_page")}); "" != s {
 			// 新的链接地址
 			baseURL = baseURL + "?" + s
 		}
@@ -223,10 +223,10 @@ func (p *Paginator) formatBaseURL() string {
 
 	if strings.Contains(baseURL, "?") {
 		// 如果此时的 url 中已经包含 query 参数时
-		baseURL = baseURL + "&" + config.GetString("paginator.url_query_page") + "="
+		baseURL = baseURL + "&" + config.GetString("cfg.paginator.url_query_page") + "="
 	} else {
 		// 如果此时的 url 中不包含 query 参数时
-		baseURL = baseURL + "?" + config.GetString("paginator.url_query_page") + "="
+		baseURL = baseURL + "?" + config.GetString("cfg.paginator.url_query_page") + "="
 	}
 
 	return baseURL

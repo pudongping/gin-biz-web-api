@@ -6,7 +6,7 @@ import (
 )
 
 func init() {
-	config.Add("paginator", func() map[string]interface{} {
+	config.Add("cfg.paginator", func() map[string]interface{} {
 		return map[string]interface{}{
 
 			// 默认每页显示数
