@@ -5,7 +5,7 @@ import (
 )
 
 func init() {
-	config.Add("log", func() map[string]interface{} {
+	config.Add("cfg.log", func() map[string]interface{} {
 		return map[string]interface{}{
 
 			// 日志级别，必须是以下这些选项：
