@@ -23,13 +23,13 @@ func NewMailer() *Mailer {
 		internalMailer = &Mailer{
 			// 使用 email.SMTP 驱动绑定驱动
 			Driver: &SMTP{&MailInfo{
-				Host:        config.GetString("email.smtp.host"),
-				Port:        config.GetInt("email.smtp.port"),
-				Username:    config.GetString("email.smtp.username"),
-				Password:    config.GetString("email.smtp.password"),
-				Encryption:  config.GetString("email.smtp.encryption"),
-				FromAddress: config.GetString("email.form.address"),
-				FromName:    config.GetString("email.form.name"),
+				Host:        config.GetString("cfg.email.smtp.host"),
+				Port:        config.GetInt("cfg.email.smtp.port"),
+				Username:    config.GetString("cfg.email.smtp.username"),
+				Password:    config.GetString("cfg.email.smtp.password"),
+				Encryption:  config.GetString("cfg.email.smtp.encryption"),
+				FromAddress: config.GetString("cfg.email.form.address"),
+				FromName:    config.GetString("cfg.email.form.name"),
 			}},
 		}
 

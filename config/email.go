@@ -6,7 +6,7 @@ import (
 )
 
 func init() {
-	config.Add("email", func() map[string]interface{} {
+	config.Add("cfg.email", func() map[string]interface{} {
 		return map[string]interface{}{
 
 			// 使用支持 ESMTP 的 SMTP 服务器发送邮件
