@@ -6,7 +6,7 @@ import (
 
 func init() {
 
-	config.Add("redis", func() map[string]interface{} {
+	config.Add("cfg.redis", func() map[string]interface{} {
 		return map[string]interface{}{
 
 			// 默认使用的 redis 配置信息

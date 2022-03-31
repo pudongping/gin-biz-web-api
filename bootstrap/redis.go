@@ -16,17 +16,17 @@ func setupRedis() {
 	// 初始化配置信息组
 	rdsConfigs := make(redis.RdsConfigs)
 	// 获取 config/redis.go 中的所有配置信息组
-	configs := config.GetStringMapString("redis")
+	configs := config.GetStringMapString("cfg.redis")
 
 	for group := range configs {
 		rdsConfigs[group] = &redis.RdsClientConfig{
 			Addr: fmt.Sprintf(
 				"%v:%v",
-				config.GetString("redis."+group+".host"),
-				config.GetString("redis."+group+".port")),
-			Username: config.GetString("redis." + group + ".username"),
-			Password: config.GetString("redis." + group + ".password"),
-			DB:       config.GetInt("redis." + group + ".db"),
+				config.GetString("cfg.redis."+group+".host"),
+				config.GetString("cfg.redis."+group+".port")),
+			Username: config.GetString("cfg.redis." + group + ".username"),
+			Password: config.GetString("cfg.redis." + group + ".password"),
+			DB:       config.GetInt("cfg.redis." + group + ".db"),
 		}
 	}
 
