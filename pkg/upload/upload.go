@@ -48,7 +48,7 @@ func SaveUploadFile(fileType FileType, files multipart.File, fileHeader *multipa
 		return nil, errors.New("超过最大文件限制")
 	}
 
-	publicPath := config.GetString("upload.save_path") // `public/uploads`
+	publicPath := config.GetString("cfg.upload.save_path") // `public/uploads`
 
 	dirName := fmt.Sprintf("%s/%s", fileType, app.TimeNowInTimezone().Format("2006/01/02")) // `image/2022/03/19`
 
@@ -78,7 +78,7 @@ func SaveUploadFile(fileType FileType, files multipart.File, fileHeader *multipa
 	// http://localhost:3000/static/image/2022/03/19/c20ad4d76fe97759aa27a0c99bff6710-20220319023344.jpg
 	accessUrl := fmt.Sprintf(
 		"%s/%s/%s",
-		app.URL(config.GetString("upload.static_fs_relative_path")), // `http://localhost:3000/static`
+		app.URL(config.GetString("cfg.upload.static_fs_relative_path")), // `http://localhost:3000/static`
 		dirName,                                                     // `image/2022/03/19`
 		fileName,                                                    // `c20ad4d76fe97759aa27a0c99bff6710-20220319023344.jpg`
 	)
@@ -139,7 +139,7 @@ func TailoringImage(fileType FileType, fileHeader *multipart.FileHeader, src str
 
 	// 重新生成文件名 eg：`PqOem-c20ad4d76fe97759aa27a0c99bff6710-20220319015124.jpg`
 	fileName := file.GenNewFileName(fileHeader.Filename)
-	publicPath := config.GetString("upload.save_path")                                      // `public/uploads`
+	publicPath := config.GetString("cfg.upload.save_path")                                      // `public/uploads`
 	dirName := fmt.Sprintf("%s/%s", fileType, app.TimeNowInTimezone().Format("2006/01/02")) // `image/2022/03/19`
 
 	// 保存路径 eg：`public/uploads/image/2022/03/19/PqOem-c20ad4d76fe97759aa27a0c99bff6710-20220319015124.jpg`
@@ -154,7 +154,7 @@ func TailoringImage(fileType FileType, fileHeader *multipart.FileHeader, src str
 	// http://localhost:3000/static/image/2022/03/19/PqOem-c20ad4d76fe97759aa27a0c99bff6710-20220319023344.jpg
 	accessUrl := fmt.Sprintf(
 		"%s/%s/%s",
-		app.URL(config.GetString("upload.static_fs_relative_path")), // `http://localhost:3000/static`
+		app.URL(config.GetString("cfg.upload.static_fs_relative_path")), // `http://localhost:3000/static`
 		dirName,                                                     // `image/2022/03/19`
 		fileName,                                                    // `PqOem-c20ad4d76fe97759aa27a0c99bff6710-20220319023344.jpg`
 	)
@@ -172,8 +172,8 @@ func TailoringImage(fileType FileType, fileHeader *multipart.FileHeader, src str
 func CheckContainExt(t FileType, fileName string) bool {
 	ext := path.Ext(fileName) // 获取文件后缀名 eg：`.jpg`
 	ext = strings.ToLower(ext)
-	imageAllows := config.GetStringSlice("upload.image.allow_suffix")
-	fileAllows := config.GetStringSlice("upload.file.allow_suffix")
+	imageAllows := config.GetStringSlice("cfg.upload.image.allow_suffix")
+	fileAllows := config.GetStringSlice("cfg.upload.file.allow_suffix")
 
 	switch t {
 	case TypeAvatar:
@@ -199,9 +199,9 @@ func CheckContainExt(t FileType, fileName string) bool {
 // true 超出，false 没有超出
 func CheckMaxSize(t FileType, f multipart.File) bool {
 
-	imageMaxSize := config.GetInt("upload.image.max_size")
-	fileMaxSize := config.GetInt("upload.file.max_size")
-	maxSize := config.GetInt("upload.max_size") * 1024 * 1024
+	imageMaxSize := config.GetInt("cfg.upload.image.max_size")
+	fileMaxSize := config.GetInt("cfg.upload.file.max_size")
+	maxSize := config.GetInt("cfg.upload.max_size") * 1024 * 1024
 
 	switch t {
 	case TypeAvatar:

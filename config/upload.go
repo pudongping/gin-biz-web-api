@@ -6,7 +6,7 @@ import (
 )
 
 func init() {
-	config.Add("upload", func() map[string]interface{} {
+	config.Add("cfg.upload", func() map[string]interface{} {
 		return map[string]interface{}{
 
 			// 文件服务器的相对路径

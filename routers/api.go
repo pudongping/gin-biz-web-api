@@ -63,7 +63,7 @@ func setStaticURL(r *gin.Engine) {
 	// eg：
 	// 需要访问 `public/uploads/image/2022/03/19/c20ad4d76fe97759aa27a0c99bff6710-20220319023344.jpg` 文件时
 	// 则访问地址为：http://localhost:3000/static/image/2022/03/19/c20ad4d76fe97759aa27a0c99bff6710-20220319023344.jpg
-	r.StaticFS(config.GetString("upload.static_fs_relative_path"), http.Dir(config.GetString("upload.save_path")))
+	r.StaticFS(config.GetString("cfg.upload.static_fs_relative_path"), http.Dir(config.GetString("cfg.upload.save_path")))
 }
 
 func apiTest(api *gin.RouterGroup) {

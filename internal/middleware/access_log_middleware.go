@@ -35,7 +35,7 @@ func AccessLog() gin.HandlerFunc {
 	return func(c *gin.Context) {
 
 		// 如果是访问静态资源，那么不记录请求日志
-		if strings.HasPrefix(c.Request.URL.Path, config.GetString("upload.static_fs_relative_path")) {
+		if strings.HasPrefix(c.Request.URL.Path, config.GetString("cfg.upload.static_fs_relative_path")) {
 			c.Next()
 			return
 		}
