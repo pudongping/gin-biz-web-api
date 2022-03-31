@@ -39,7 +39,7 @@ func NewVerifyCode() *VerifyCode {
 func (v *VerifyCode) GenerateVerifyCode(key string) string {
 
 	// 生成指定长度的数字随机码作为验证码
-	code := strx.StrRandomNumber(config.GetInt("verify_code.length"))
+	code := strx.StrRandomNumber(config.GetInt("cfg.verify_code.length"))
 
 	logger.DebugJSON("VerifyCode", "生成的验证码", map[string]string{key: code})
 
@@ -62,7 +62,7 @@ func (v *VerifyCode) SendEmailVerifyCode(mail string) error {
 	// 生成验证码
 	code := v.GenerateVerifyCode(mail)
 	// 验证码的有效期
-	expire := config.GetInt64("verify_code.expire_time")
+	expire := config.GetInt64("cfg.verify_code.expire_time")
 
 	content := fmt.Sprintf("<h1> 尊敬的用户：您的验证码为 %v 有效期为 %v 分钟。</h1>", code, expire)
 

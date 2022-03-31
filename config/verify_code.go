@@ -6,7 +6,7 @@ import (
 )
 
 func init() {
-	config.Add("verify_code", func() map[string]interface{} {
+	config.Add("cfg.verify_code", func() map[string]interface{} {
 		return map[string]interface{}{
 
 			// 验证码的长度
