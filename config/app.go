@@ -8,7 +8,7 @@ import (
 )
 
 func init() {
-	config.Add("app", func() map[string]interface{} {
+	config.Add("cfg.app", func() map[string]interface{} {
 
 		var (
 			env, port, ginRunMode string

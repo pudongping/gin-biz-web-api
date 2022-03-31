@@ -161,7 +161,7 @@ func (j *JWT) GenerateToken(userId string) string {
 			NotBefore: app.TimeNowInTimezone().Unix(), // 签名生效时间
 			IssuedAt:  app.TimeNowInTimezone().Unix(), // 首次签名时间（后续刷新 token 不会更新）
 			ExpiresAt: expireAtTime,                   // 签名过期时间
-			Issuer:    config.GetString("app.name"),   // 签名颁发者
+			Issuer:    config.GetString("cfg.app.name"),   // 签名颁发者
 		},
 	}
 

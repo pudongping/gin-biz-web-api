@@ -37,7 +37,7 @@ func registerGlobalMiddleWare(router *gin.Engine) {
 		gin.Logger(),                                                                                // gin 框架自身的请求日志中间件（会在控制台中打印出路由请求及请求耗时）
 		middleware.AccessLog(),                                                                      // 请求日志中间件
 		middleware.Recovery(),                                                                       // 记录 Panic 和 call stack
-		middleware.ContextTimeout(time.Duration(config.GetUint("app.context_timeout"))*time.Second), // 上下文超时时间
+		middleware.ContextTimeout(time.Duration(config.GetUint("cfg.app.context_timeout"))*time.Second), // 上下文超时时间
 	)
 }
 

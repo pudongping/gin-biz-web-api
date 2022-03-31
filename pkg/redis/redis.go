@@ -100,7 +100,7 @@ func (r RdsClient) Ping() error {
 
 // GetNamespace 获取 redis 的命名空间
 func GetNamespace() string {
-	return config.GetString("app.name") + ":"
+	return config.GetString("cfg.app.name") + ":"
 }
 
 // GenNamespace 生成带有命名空间前缀的 key

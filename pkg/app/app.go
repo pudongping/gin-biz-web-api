@@ -11,32 +11,32 @@ import (
 
 // IsLocal 是否为本地环境
 func IsLocal() bool {
-	return strings.ToLower(config.GetString("app.env")) == "local"
+	return strings.ToLower(config.GetString("cfg.app.env")) == "local"
 }
 
 // IsDev 是否为开发环境
 func IsDev() bool {
-	return strings.ToLower(config.GetString("app.env")) == "dev"
+	return strings.ToLower(config.GetString("cfg.app.env")) == "dev"
 }
 
 // IsTest 是否为测试环境
 func IsTest() bool {
-	return strings.ToLower(config.GetString("app.env")) == "test"
+	return strings.ToLower(config.GetString("cfg.app.env")) == "test"
 }
 
 // IsProd 是否为生产环境
 func IsProd() bool {
-	return strings.ToLower(config.GetString("app.env")) == "prod"
+	return strings.ToLower(config.GetString("cfg.app.env")) == "prod"
 }
 
 // IsDebug 是否为调试模式
 func IsDebug() bool {
-	return config.GetBool("app.debug")
+	return config.GetBool("cfg.app.debug")
 }
 
 // TimeNowInTimezone 获取当前时区的时间
 func TimeNowInTimezone() time.Time {
-	chinaTimezone, _ := time.LoadLocation(config.GetString("app.timezone"))
+	chinaTimezone, _ := time.LoadLocation(config.GetString("cfg.app.timezone"))
 	return time.Now().In(chinaTimezone)
 }
 
@@ -46,14 +46,14 @@ func TimeNowInTimezone() time.Time {
 // inputTime := "2029-09-04 12:02:33"
 // output is："2029-09-04 12:02:33"
 func TimeParseInTimezone(layout, inputTime string) string {
-	chinaTimezone, _ := time.LoadLocation(config.GetString("app.timezone"))
+	chinaTimezone, _ := time.LoadLocation(config.GetString("cfg.app.timezone"))
 	t, _ := time.ParseInLocation(layout, inputTime, chinaTimezone)
 	return time.Unix(t.Unix(), 0).In(chinaTimezone).Format(layout)
 }
 
 // URL 拼接站点的 url
 func URL(path string) string {
-	return config.GetString("app.url") + path
+	return config.GetString("cfg.app.url") + path
 }
 
 // RemoveQueryKey 移除 uri 中的某个参数
