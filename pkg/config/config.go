@@ -61,6 +61,8 @@ func NewConfig(env string, configs ...string) {
 
 	// 将读取的配置文件信息覆写自定义配置
 	LoadConfig()
+
+	WatchConfigurationChange()
 }
 
 // WatchConfigurationChange 热重载配置文件
@@ -122,9 +124,9 @@ func Instance() *viper.Viper {
 // BackupConfig 将所有的配置信息导出到指定文件中
 func BackupConfig() error {
 	// 如果想要覆盖，则调用
-	// vp.WriteConfigAs("./etc/config_backup.yaml")
+	return vp.WriteConfigAs("./etc/config_backup.yaml")
 	// 如果备份配置文件存在，则不覆盖
-	return vp.SafeWriteConfigAs("./etc/config_backup.yaml")
+	// return vp.SafeWriteConfigAs("./etc/config_backup.yaml")
 }
 
 // GetString 获取 string 类型的配置信息
