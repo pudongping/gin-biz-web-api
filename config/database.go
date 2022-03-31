@@ -5,7 +5,7 @@ import (
 )
 
 func init() {
-	config.Add("database", func() map[string]interface{} {
+	config.Add("cfg.database", func() map[string]interface{} {
 		return map[string]interface{}{
 
 			// 默认数据库

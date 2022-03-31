@@ -44,7 +44,7 @@ func DropAllTables() error {
 	var err error
 	console.Danger("Most dangerous!")
 
-	switch config.GetString("database.driver") {
+	switch config.GetString("cfg.database.driver") {
 	case "mysql":
 		err = dropMysqlDatabase()
 	default:
