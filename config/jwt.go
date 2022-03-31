@@ -10,7 +10,7 @@ func init() {
 		return map[string]interface{}{
 
 			// jwt 加密 key
-			"key": config.Get("JWT.Key", "zBqYyQrPNaIUsnRhsGtHLivjqiMjBVLS"),
+			"key": config.Get("JWT.Key"),
 
 			// 过期时间，单位是分钟，一般不超过两个小时
 			"expire_time": config.Get("JWT.ExpireTime", 120),
