@@ -67,11 +67,13 @@ func NewConfig(env string, configs ...string) {
 
 // WatchConfigurationChange 热重载配置文件
 func WatchConfigurationChange() {
-	vp.WatchConfig()
-	vp.OnConfigChange(func(e fsnotify.Event) {
-		LoadConfig()
-		console.Warning("Reload configuration file [ %v ] operation [ %v ]", e.Name, e.Op)
-	})
+	go func() {
+		vp.WatchConfig()
+		vp.OnConfigChange(func(e fsnotify.Event) {
+			LoadConfig()
+			console.Warning("Reload configuration file [ %v ] operation [ %v ]", e.Name, e.Op)
+		})
+	}()
 }
 
 // FetchConfigFile 根据环境变量获取对应的配置文件
