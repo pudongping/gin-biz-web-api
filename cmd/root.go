@@ -14,10 +14,15 @@ import (
 // RegisterGlobalFlags 注册全局选项 flag
 func RegisterGlobalFlags(rootCmd *cobra.Command) {
 	// 定义全局变量，使用【持久标识】以便所有的子命令都可以使用
-	rootCmd.PersistentFlags().StringVarP(&global.Env, "env", "e", "", `Project run environment, support "local、dev、test、prod", eg: "--env=test" will use test_config.yaml configuration file`)
-	rootCmd.PersistentFlags().StringVarP(&global.Port, "port", "p", "", `Http server run port, eg: "--port=8081" will use 8081 port run http server`)
-	rootCmd.PersistentFlags().StringVar(&global.GinRunMode, "mode", "", `Gin framework application startup mode, support "debug、release、test", suggestion use "release" mode`)
-	rootCmd.PersistentFlags().StringVarP(&global.ConfigPath, "config_path", "c", "etc/", `Specify the path to the configuration file. Separate multiple paths with english commas (,) eg: "etc/,configs/"`)
+	envUsage := `Project run environment, support "local、dev、test、prod", eg: "--env=test" will use test_config.yaml configuration file`
+	portUsage := `Http server run port, eg: "--port=8081" will use 8081 port run http server`
+	ginRunModeUsage := `Gin framework application startup mode, support "debug、release、test", suggestion use "release" mode`
+	configPathUsage := `Specify the path to the configuration file. Separate multiple paths with english commas (,) eg: "etc/,configs/"`
+
+	rootCmd.PersistentFlags().StringVarP(&global.Env, "env", "e", "", envUsage)
+	rootCmd.PersistentFlags().StringVarP(&global.Port, "port", "p", "", portUsage)
+	rootCmd.PersistentFlags().StringVar(&global.GinRunMode, "mode", "", ginRunModeUsage)
+	rootCmd.PersistentFlags().StringVarP(&global.ConfigPath, "config_path", "c", "etc/", configPathUsage)
 }
 
 // RegisterDefaultCmd 注册没有命令参数时默认启动的命令
