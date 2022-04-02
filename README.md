@@ -45,7 +45,8 @@ cd <your-path>/gin-biz-web-api && go mod tidy
 
 - 修改配置
 
-将根目录下的 `/etc/config.yaml` 配置文件中的配置信息修改成你自己的配置。如果启动项目时设置了 `--env` 参数，那么则会走对应的环境配置信息。  
+将根目录下的 `/etc/config.yaml.example` 配置文件复制成 `/etc/config.yaml` 然后将 `/etc/config.yaml` 文件中的配置信息修改成你自己的配置。
+如果启动项目时设置了 `--env` 参数，那么则会走对应的环境配置信息。  
 比如启动项目时，执行了 `go run main.go --env=prod` 命令，那么则会使用 `/etc/prod_config.yaml` 文件中的配置信息，如果对应文件不存在，请  
 将 `cp ./etc/config.yaml ./etc/prod_config.yaml` 复制一份。
 
