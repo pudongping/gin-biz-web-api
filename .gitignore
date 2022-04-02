@@ -22,3 +22,9 @@ tmp
 !.gitkeep
 
 gin-biz-web-api
+
+etc/config.yaml
+etc/config_local.yaml
+etc/config_dev.yaml
+etc/config_test.yaml
+etc/config_prod.yaml
