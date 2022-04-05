@@ -5,7 +5,6 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/spf13/cast"
 
-	"gin-biz-web-api/pkg/app"
 	"gin-biz-web-api/pkg/errcode"
 	"gin-biz-web-api/pkg/limiter"
 	"gin-biz-web-api/pkg/logger"
@@ -27,11 +26,6 @@ import (
 // * 2000 reqs/day: "2000-D"
 //
 func LimitIP(limit string) gin.HandlerFunc {
-
-	if app.IsLocal() {
-		limit = "1000000-H" // 本地环境时，设置每小时可以请求 1000000 次
-	}
-
 	return func(c *gin.Context) {
 
 		// 针对 IP 限流
@@ -42,16 +36,10 @@ func LimitIP(limit string) gin.HandlerFunc {
 
 		c.Next()
 	}
-
 }
 
 // LimitRoute 用于单独的路由
 func LimitRoute(limit string) gin.HandlerFunc {
-
-	if app.IsLocal() {
-		limit = "10000-H" // 本地环境时，设置每小时可以请求 10000 次
-	}
-
 	return func(c *gin.Context) {
 
 		// 针对单个路由，增加访问次数
@@ -66,7 +54,6 @@ func LimitRoute(limit string) gin.HandlerFunc {
 		c.Next()
 
 	}
-
 }
 
 // handlerLimit 处理请求频率限制
