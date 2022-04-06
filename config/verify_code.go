@@ -14,11 +14,6 @@ func init() {
 
 			// 过期时间，单位是：分钟
 			"expire_time": config.Get("VerifyCode.ExpireTime", 15),
-
-			// local 环境下的过期时间，方便本地开发调试，单位是：分钟
-			"local_expire_time": 10080,
-			// local 环境下的验证码，默认为：123456
-			"local_code": 123456,
 		}
 	})
 }

@@ -4,7 +4,6 @@ package verifycode
 import (
 	"time"
 
-	"gin-biz-web-api/pkg/app"
 	"gin-biz-web-api/pkg/config"
 	"gin-biz-web-api/pkg/redis"
 )
@@ -17,14 +16,7 @@ type RedisDriver struct {
 
 // Set 实现了 verifycode.Driver interface 的 Set 方法
 func (r *RedisDriver) Set(key, value string) bool {
-
 	expireTime := time.Minute * time.Duration(config.GetInt64("cfg.verify_code.expire_time"))
-
-	// 方便本地开发调试，如果不需要，可以将这段代码删掉
-	if app.IsLocal() {
-		expireTime = time.Minute * time.Duration(config.GetInt64("cfg.verify_code.local_expire_time"))
-	}
-
 	return redis.Set(r.KeyPrefix+key, value, expireTime, r.Group)
 }
 

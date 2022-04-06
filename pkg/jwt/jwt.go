@@ -158,10 +158,10 @@ func (j *JWT) GenerateToken(userId string) string {
 		UserID:       userId,
 		ExpireAtTime: expireAtTime,
 		StandardClaims: jwtPkg.StandardClaims{
-			NotBefore: app.TimeNowInTimezone().Unix(), // 签名生效时间
-			IssuedAt:  app.TimeNowInTimezone().Unix(), // 首次签名时间（后续刷新 token 不会更新）
-			ExpiresAt: expireAtTime,                   // 签名过期时间
-			Issuer:    config.GetString("cfg.app.name"),   // 签名颁发者
+			NotBefore: app.TimeNowInTimezone().Unix(),   // 签名生效时间
+			IssuedAt:  app.TimeNowInTimezone().Unix(),   // 首次签名时间（后续刷新 token 不会更新）
+			ExpiresAt: expireAtTime,                     // 签名过期时间
+			Issuer:    config.GetString("cfg.app.name"), // 签名颁发者
 		},
 	}
 
@@ -186,16 +186,7 @@ func (j *JWT) createToken(claims JWTCustomClaims) (string, error) {
 // expireAtTime 获取过期时间点
 func (j *JWT) expireAtTime() int64 {
 	timeNow := app.TimeNowInTimezone() // 获取当前时区的时间
-
-	var expireTime int64
-
-	if app.IsLocal() {
-		// 调试模式时，使用调试模式的过期时间
-		expireTime = config.GetInt64("cfg.jwt.local_expire_time")
-	} else {
-		expireTime = config.GetInt64("cfg.jwt.expire_time")
-	}
-
+	expireTime := config.GetInt64("cfg.jwt.expire_time")
 	expire := time.Duration(expireTime) * time.Minute
 	// 返回加过期时间区间后的时间点
 	return timeNow.Add(expire).Unix()

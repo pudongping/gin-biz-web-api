@@ -19,7 +19,7 @@ func BindAndValidate(c *gin.Context, obj interface{}, handler ValidateFunc) bool
 	// 解析请求，支持 JSON 数据、表单请求和 URL Query
 	// 参见：[gin 框架中文文档](https://www.kancloud.cn/shuangdeyu/gin_book/949426)
 	if err := c.ShouldBind(obj); err != nil {
-		response.ToErrorResponse(errcode.BadRequest.WithDetails(err.Error()), "请求体解析错误，请确认请求格式是否正确。上传文件请使用 multipart 标头，参数建议使用 JSON 格式")
+		response.ToErrorResponse(errcode.BadRequest.WithDetails(err.Error()), "请求体解析错误，请确认请求格式是否正确")
 		return false
 	}
 

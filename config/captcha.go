@@ -26,12 +26,6 @@ func init() {
 
 			// 过期时间，单位是：分钟
 			"expire_time": config.Get("Captcha.ExpireTime", 15),
-
-			// local 环境下的过期时间，方便本地开发调试，单位是：分钟
-			"local_expire_time": 10080,
-
-			// local 环境下，使用此 key 可跳过验证，方便测试
-			"local_key": "captcha_skip_local",
 		}
 	})
 }

@@ -5,7 +5,6 @@ import (
 
 	"github.com/mojocn/base64Captcha"
 
-	"gin-biz-web-api/pkg/app"
 	"gin-biz-web-api/pkg/config"
 	"gin-biz-web-api/pkg/redis"
 )
@@ -58,12 +57,6 @@ func (c *Captcha) GenerateCaptcha() (id, b64s string, err error) {
 
 // VerifyCaptcha 验证验证码是否正确
 func (c *Captcha) VerifyCaptcha(id, answer string, isClear ...bool) bool {
-
-	// 方便本地调试
-	if app.IsLocal() && id == config.GetString("cfg.captcha.local_key") {
-		return true
-	}
-
 	var clear bool
 	if len(isClear) > 0 {
 		clear = isClear[0]
