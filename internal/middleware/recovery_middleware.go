@@ -1,6 +1,7 @@
 package middleware
 
 import (
+	"fmt"
 	"net"
 	"net/http/httputil"
 	"os"
@@ -59,7 +60,7 @@ func Recovery() gin.HandlerFunc {
 				)
 
 				// 返回 500 状态码
-				responses.New(c).ToErrorResponse(errcode.InternalServerError.WithDetails(err.(error).Error()))
+				responses.New(c).ToErrorResponse(errcode.InternalServerError.WithDetails(fmt.Sprintf("recovery panic err: %v", err)))
 				c.Abort()
 			}
 		}()
