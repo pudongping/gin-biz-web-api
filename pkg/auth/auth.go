@@ -5,6 +5,7 @@ import (
 	"errors"
 
 	"github.com/gin-gonic/gin"
+	"github.com/spf13/cast"
 
 	"gin-biz-web-api/model/user_model"
 	"gin-biz-web-api/pkg/logger"
@@ -23,5 +24,5 @@ func CurrentUser(c *gin.Context) user_model.User {
 
 // CurrentUserID 从 gin.context 中获取当前登录的用户 ID
 func CurrentUserID(c *gin.Context) uint {
-	return c.GetUint("current_user_id")
+	return cast.ToUint(c.MustGet("current_user_id"))
 }
