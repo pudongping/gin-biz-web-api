@@ -2,8 +2,43 @@
 package model
 
 import (
+	"database/sql/driver"
+	"fmt"
+	"time"
+
 	"github.com/spf13/cast"
 )
+
+type TimeNormal struct {
+	time.Time
+}
+
+// MarshalJSON 将时间字段转换为 `%Y-%m-%d %H:%M:%S` 格式
+func (t TimeNormal) MarshalJSON() ([]byte, error) {
+	tune := t.Format(`"2006-01-02 15:04:05"`)
+	return []byte(tune), nil
+}
+
+// Value 写入 mysql 时，需要调用这个方法
+func (t TimeNormal) Value() (driver.Value, error) {
+	var zeroTime time.Time
+	// 判断给定时间是否和默认零时间的时间戳相同
+	if t.Time.UnixNano() == zeroTime.UnixNano() {
+		return nil, nil
+	}
+	return t.Time, nil
+}
+
+// Scan 在数据查询出来之前对数据进行操作
+func (t *TimeNormal) Scan(v interface{}) error {
+	value, ok := v.(time.Time)
+	if ok {
+		*t = TimeNormal{Time: value}
+		return nil
+	}
+
+	return fmt.Errorf("can not convert %v to timestamp", value)
+}
 
 // BaseModel 模型基类
 type BaseModel struct {
