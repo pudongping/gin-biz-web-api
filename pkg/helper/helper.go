@@ -2,6 +2,7 @@
 package helper
 
 import (
+	"encoding/json"
 	"reflect"
 )
 
@@ -28,4 +29,13 @@ func Empty(val interface{}) bool {
 		return v.IsNil()
 	}
 	return reflect.DeepEqual(val, reflect.Zero(v.Type()).Interface())
+}
+
+// DeepClone 深拷贝对象
+func DeepClone(obj interface{}) (wanted interface{}, err error) {
+	var b []byte
+	b, err = json.Marshal(obj)
+	err = json.Unmarshal(b, &wanted)
+
+	return
 }
