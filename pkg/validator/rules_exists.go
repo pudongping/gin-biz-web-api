@@ -25,19 +25,16 @@ func init() {
 		// 第二个参数，字段名称，如 id
 		dbFiled := sl[1]
 
-		// 用户请求过来的数据
-		requestValue := value.(string)
-
 		// 查询数据库
 		var count int64
-		database.DB.Table(tableName).Where(fmt.Sprintf("`%s` = ?", dbFiled), requestValue).Count(&count)
+		database.DB.Table(tableName).Where(fmt.Sprintf("`%s` = ?", dbFiled), value).Count(&count)
 		// 验证不通过，数据不存在
 		if count == 0 {
 			// 如果有自定义错误消息的话，使用自定义消息
 			if message != "" {
 				return errors.New(message)
 			}
-			return fmt.Errorf("%v 不存在", requestValue)
+			return fmt.Errorf("%v 不存在", value)
 		}
 		return nil
 	})
@@ -61,11 +58,8 @@ func init() {
 			exceptID = sl[2]
 		}
 
-		// 用户请求过来的数据
-		requestValue := value.(string)
-
 		// 拼接 SQL
-		query := database.DB.Table(tableName).Where(fmt.Sprintf("`%s` = ?", dbFiled), requestValue)
+		query := database.DB.Table(tableName).Where(fmt.Sprintf("`%s` = ?", dbFiled), value)
 
 		// 如果传参第三个参数，加上 SQL Where 过滤
 		if exceptID != "" {
@@ -83,7 +77,7 @@ func init() {
 				return errors.New(message)
 			}
 			// 默认的错误消息
-			return fmt.Errorf("%v 已被占用", requestValue)
+			return fmt.Errorf("%v 已被占用", value)
 		}
 		// 验证通过
 		return nil
