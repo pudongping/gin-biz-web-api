@@ -30,7 +30,7 @@ func init() {
 
 		// 查询数据库
 		var count int64
-		database.DB.Table(tableName).Where(fmt.Sprintf("%s = ?", dbFiled), requestValue).Count(&count)
+		database.DB.Table(tableName).Where(fmt.Sprintf("`%s` = ?", dbFiled), requestValue).Count(&count)
 		// 验证不通过，数据不存在
 		if count == 0 {
 			// 如果有自定义错误消息的话，使用自定义消息
@@ -65,7 +65,7 @@ func init() {
 		requestValue := value.(string)
 
 		// 拼接 SQL
-		query := database.DB.Table(tableName).Where(fmt.Sprintf("%s = ?", dbFiled), requestValue)
+		query := database.DB.Table(tableName).Where(fmt.Sprintf("`%s` = ?", dbFiled), requestValue)
 
 		// 如果传参第三个参数，加上 SQL Where 过滤
 		if exceptID != "" {
