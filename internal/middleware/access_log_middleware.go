@@ -3,6 +3,7 @@ package middleware
 import (
 	"bytes"
 	"io/ioutil"
+	"net/url"
 	"strings"
 	"time"
 
@@ -86,7 +87,8 @@ func AccessLog() gin.HandlerFunc {
 		// 如果是上传文件，那么则不记录请求参数内容
 		if !strings.HasPrefix(c.Request.Header.Get("Content-Type"), "multipart/form-data") {
 			// 请求的内容 eg：`"x=33&y=zz"`
-			logFields = append(logFields, zap.String("request_body", string(requestBody)))
+			requestBodyDecode, _ := url.QueryUnescape(string(requestBody)) // 中文会被加码，因此为了方便查看中文参数，对请求体进行解码
+			logFields = append(logFields, zap.String("request_body", requestBodyDecode))
 		}
 
 		// 响应的内容
