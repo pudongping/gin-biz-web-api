@@ -19,14 +19,15 @@ func setupRedis() {
 	configs := config.GetStringMapString("cfg.redis")
 
 	for group := range configs {
+		cfgPrefix := "cfg.redis." + group + "."
 		rdsConfigs[group] = &redis.RdsClientConfig{
 			Addr: fmt.Sprintf(
 				"%v:%v",
-				config.GetString("cfg.redis."+group+".host"),
-				config.GetString("cfg.redis."+group+".port")),
-			Username: config.GetString("cfg.redis." + group + ".username"),
-			Password: config.GetString("cfg.redis." + group + ".password"),
-			DB:       config.GetInt("cfg.redis." + group + ".db"),
+				config.GetString(cfgPrefix+"host"),
+				config.GetString(cfgPrefix+"port")),
+			Username: config.GetString(cfgPrefix + "username"),
+			Password: config.GetString(cfgPrefix + "password"),
+			DB:       config.GetInt(cfgPrefix + "db"),
 		}
 	}
 
