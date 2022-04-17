@@ -182,6 +182,7 @@ func (p *Paginator) getTotalCount() int {
 
 	// 获取数据总条数的时候不应该出现 order 、limit、offset
 	if err := newQuery.query.Offset(-1).Limit(-1).Count(&count).Error; err != nil {
+		logger.ErrorString("paginator package", "getTotalCount method", err.Error())
 		return 0
 	}
 
