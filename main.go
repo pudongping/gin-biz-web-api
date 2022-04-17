@@ -60,7 +60,7 @@ func run() {
 
 	// 执行主命令
 	if err := rootCmd.Execute(); err != nil {
-		console.Exit("Failed to run server with %v: %s", os.Args, err.Error())
+		console.Exit("Failed to run server with %v ====> %s", os.Args, err.Error())
 	}
 
 }

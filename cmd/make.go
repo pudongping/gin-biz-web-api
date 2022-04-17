@@ -20,11 +20,12 @@ var MakeCmd = &cobra.Command{
 }
 
 // eg: go run main.go make model users
+// or: go run main.go make model users default
 var makeModelStructCmd = &cobra.Command{
 	Use:   "model",
 	Short: "Generate model struct. Pay attention to, this command only applies to mysql databases.",
 	Run:   runMakeModel,
-	Args:  cobra.ExactArgs(1), // 有且仅有一个参数
+	Args:  cobra.RangeArgs(1, 2), // 最少一个参数，最多两个参数
 }
 
 func init() {
@@ -42,16 +43,25 @@ func runMakeModel(cmd *cobra.Command, args []string) {
 	}
 
 	tableName := args[0] // 表名作为唯一参数
+	var group string     // 数据库配置信息组作为第二个参数
+
+	if len(args) == 2 {
+		group = args[1]
+	} else {
+		group = "default"
+	}
+
+	cfgPrefix := "cfg.database.mysql." + group + "."
 
 	params := []string{
 		"sql",
 		"struct",
 		"--username",
-		config.GetString("cfg.database.mysql.username"),
+		config.GetString(cfgPrefix + "username"),
 		"--password",
-		config.GetString("cfg.database.mysql.password"),
+		config.GetString(cfgPrefix + "password"),
 		"--db",
-		config.GetString("cfg.database.mysql.database"),
+		config.GetString(cfgPrefix + "database"),
 		"--table",
 		tableName,
 	}
