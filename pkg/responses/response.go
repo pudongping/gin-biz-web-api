@@ -36,10 +36,10 @@ func (r *Response) ToResponse(data interface{}) {
 }
 
 // ToResponseWithPagination 返回分页数据
-func (r *Response) ToResponseWithPagination(results interface{}, pager paginator.Pagination) {
+func (r *Response) ToResponseWithPagination(result interface{}, pagination paginator.Pagination) {
 	r.ToResponse(gin.H{
-		"results": results,
-		"pager":   pager,
+		"result":     result,
+		"pagination": pagination,
 	})
 }
 
