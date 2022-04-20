@@ -4,6 +4,7 @@ package validator
 import (
 	"errors"
 	"fmt"
+	"reflect"
 	"strings"
 
 	"github.com/thedevsaddam/govalidator"
@@ -19,6 +20,18 @@ func init() {
 	// 自定义规则 exists，确保数据库存在某条数据
 	// eg: exists:users,id
 	govalidator.AddCustomRule("exists", func(field string, rule string, message string, value interface{}) error {
+		if value == nil {
+			return nil
+		}
+		v := reflect.ValueOf(value)
+		switch v.Kind() {
+		// 如果为空字符串，则不做校验
+		case reflect.String:
+			if v.Len() == 0 {
+				return nil
+			}
+		}
+
 		sl := strings.Split(strings.TrimPrefix(rule, "exists:"), ",")
 
 		// 第一个参数，表名称，如 users
@@ -47,6 +60,18 @@ func init() {
 	// not_exists:users,email,8 排除掉用户 id 为 8 的用户
 	// not_exists:users,email,id,8,name,alex 排除掉用户 id 为 8 并且 name 为 alex 的用户
 	govalidator.AddCustomRule("not_exists", func(field string, rule string, message string, value interface{}) error {
+		if value == nil {
+			return nil
+		}
+		v := reflect.ValueOf(value)
+		switch v.Kind() {
+		// 如果为空字符串，则不做校验
+		case reflect.String:
+			if v.Len() == 0 {
+				return nil
+			}
+		}
+
 		sl := strings.Split(strings.TrimPrefix(rule, "not_exists:"), ",")
 
 		// 第一个参数，表名称，如 users
