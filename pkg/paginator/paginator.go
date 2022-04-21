@@ -56,16 +56,23 @@ func Paginate(c *gin.Context, db *gorm.DB, data interface{}, perPage ...int) Pag
 		query: db,
 		ctx:   c,
 	}
+
+	// 临时保存一下【预加载】语句
+	tempPreloads := db.Statement.Preloads
+
 	// 初始化分页所需要使用到的属性值
 	p.initProperties(perPage...)
 
-	// p.query = p.query.Preload(clause.Associations) // 预加载全部关联
+	newQuery := p.cloneQuery()
+	// 查询数据时，重新赋予【预加载】语句
+	newQuery.Statement.Preloads = tempPreloads
+
 	// 排序
 	for k := range p.SortColumn {
-		p.query = p.query.Order(fmt.Sprintf("%s %s", p.SortColumn[k], p.SortRules[k]))
+		newQuery = newQuery.Order(fmt.Sprintf("`%s` %s", p.SortColumn[k], p.SortRules[k]))
 	}
 
-	if err := p.query.Limit(p.PerPage).Offset(p.Offset).Find(data).Error; err != nil {
+	if err := newQuery.Limit(p.PerPage).Offset(p.Offset).Find(data).Error; err != nil {
 		// 数据库出错
 		logger.LogErrorIf(err)
 		return Pagination{}
@@ -178,10 +185,12 @@ func (p *Paginator) getOrderBy() (sortColumn []string, sortRules []string) {
 // getTotalCount 获取数据总条数
 func (p *Paginator) getTotalCount() int {
 	var count int64
-	newQuery := *p
+	newQuery := p.cloneQuery()
+	// mod/gorm.io/gorm@v1.23.2/statement.go@clone()
+	newQuery.Statement.Preloads = map[string][]interface{}{}
 
-	// 获取数据总条数的时候不应该出现 order by 、limit、offset
-	if err := newQuery.query.Offset(-1).Limit(-1).Count(&count).Error; err != nil {
+	// 获取数据总条数的时候不应该出现 order by、limit、offset
+	if err := newQuery.Offset(-1).Limit(-1).Count(&count).Error; err != nil {
 		logger.ErrorString("paginator package", "getTotalCount method", err.Error())
 		return 0
 	}
@@ -261,4 +270,17 @@ func (p *Paginator) getPageLink(page int) string {
 		p.BaseURL,
 		page, // 当前页码数
 	)
+}
+
+func (p *Paginator) clone() *Paginator {
+	pp := *p
+	return &pp
+}
+
+// cloneQuery 克隆出一个 query 句柄
+// （注意：此时仍然是浅拷贝，因为 *gorm.DB 中仍然含有引用类型的字段）
+// 具体的深拷贝可以参考 mod/gorm.io/gorm@v1.23.2/statement.go@clone() 方法
+func (p *Paginator) cloneQuery() *gorm.DB {
+	q := *p.query
+	return &q
 }
