@@ -22,10 +22,11 @@ var MakeCmd = &cobra.Command{
 // eg: go run main.go make model users
 // or: go run main.go make model users default
 var makeModelStructCmd = &cobra.Command{
-	Use:   "model",
-	Short: "Generate model struct. Pay attention to, this command only applies to mysql databases.",
-	Run:   runMakeModel,
-	Args:  cobra.RangeArgs(1, 2), // 最少一个参数，最多两个参数
+	Use:     "model",
+	Short:   "Generate model struct. Pay attention to, this command only applies to mysql databases.",
+	Example: "'go run main.go make model users' OR 'go run main.go make model users default'",
+	Run:     runMakeModel,
+	Args:    cobra.RangeArgs(1, 2), // 最少一个参数，最多两个参数
 }
 
 func init() {

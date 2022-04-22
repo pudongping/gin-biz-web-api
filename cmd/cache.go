@@ -17,24 +17,27 @@ var CacheCmd = &cobra.Command{
 
 // cacheClearCmd 清空所有的缓存
 var cacheClearCmd = &cobra.Command{
-	Use:   "clear",
-	Short: "Clear all cache. Notice: this command is most dangerous! eg: cache clear",
-	Long:  "Notice: this command is most dangerous!",
-	Run:   runCacheClear,
+	Use:     "clear",
+	Short:   "Clear all cache. Notice: this command is most dangerous! eg: cache clear",
+	Example: "go run main.go cache clear",
+	Long:    "Notice: this command is most dangerous!",
+	Run:     runCacheClear,
 }
 
 // cacheForgetCmd 删除缓存中的某个 key
 var cacheForgetCmd = &cobra.Command{
-	Use:   "forget",
-	Short: "Delete cache key, eg: cache forget cache-key",
-	Run:   runCacheForget,
+	Use:     "forget",
+	Short:   "Delete cache key, eg: cache forget cache-key",
+	Example: "go run main.go cache forget cache-key",
+	Run:     runCacheForget,
 }
 
 // cacheGetCmd 获取缓存中的某个值
 var cacheGetCmd = &cobra.Command{
-	Use:   "get",
-	Short: "Get cache value, eg: cache get cache-key",
-	Run:   runCacheGet,
+	Use:     "get",
+	Short:   "Get cache value, eg: cache get cache-key",
+	Example: "go run main.go cache get cache-key",
+	Run:     runCacheGet,
 }
 
 // 需要删除的缓存 key
