@@ -92,7 +92,6 @@ make build-local
 - [go-redis/redis](https://github.com/go-redis/redis/v8) —— Redis 操作
 - [mojocn/base64Captcha](https://github.com/mojocn/base64Captcha) —— 图片验证码
 - [thedevsaddam/govalidator](https://github.com/thedevsaddam/govalidator) —— 请求验证器
-- [mgutz/ansi](https://github.com/mgutz/ansi) —— 终端高亮输出
 - [iancoleman/strcase](https://github.com/iancoleman/strcase) —— 字符串大小写操作
 - [gertd/go-pluralize](https://github.com/gertd/go-pluralize) —— 英文字符单数复数处理
 - [golang-jwt/jwt](https://github.com/golang-jwt/jwt) —— JWT 认证
