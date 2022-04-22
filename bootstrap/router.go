@@ -15,10 +15,10 @@ import (
 	"gin-biz-web-api/routers"
 )
 
-// setupRoute 路由初始化
-func setupRoute(router *gin.Engine) {
+// setupRouter 路由初始化
+func setupRouter(router *gin.Engine) {
 
-	console.Info("init route ...")
+	console.Info("init router ...")
 
 	// 注册全局中间件
 	registerGlobalMiddleWare(router)

@@ -28,7 +28,7 @@ func RunServer() {
 	// gin 实例
 	router := gin.New()
 	// 初始化路由绑定
-	setupRoute(router)
+	setupRouter(router)
 	// 运行服务器
 	srv := initServer(router)
 	console.Success("Http Server is running at: http://0.0.0.0:%d", config.GetInt("cfg.app.port"))
@@ -77,6 +77,6 @@ func initServer(router *gin.Engine) *http.Server {
 		Handler:        router,
 		ReadTimeout:    time.Second * time.Duration(config.GetInt64("cfg.app.read_timeout")),  // 允许读取的最大时间
 		WriteTimeout:   time.Second * time.Duration(config.GetInt64("cfg.app.write_timeout")), // 允许写入的最大时间
-		MaxHeaderBytes: 1 << 20,                                                           // 请求头的最大字节数
+		MaxHeaderBytes: 1 << 20,                                                               // 请求头的最大字节数
 	}
 }
