@@ -39,7 +39,8 @@ func NewVerifyCode() *VerifyCode {
 func (v *VerifyCode) GenerateVerifyCode(key string) string {
 
 	// 生成指定长度的数字随机码作为验证码
-	code := strx.StrRandomNumber(config.GetInt("cfg.verify_code.length"))
+	// code := strx.StrRandomNumber(config.GetInt("cfg.verify_code.length"))
+	code := strx.StrRandomOptionalString(config.GetInt("cfg.verify_code.length"), strx.Numeric)
 
 	logger.DebugJSON("VerifyCode", "生成的验证码", map[string]string{key: code})
 

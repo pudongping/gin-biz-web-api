@@ -37,7 +37,7 @@ func GenNewFileName(filename string) string {
 	ext := path.Ext(filename)              // 获取文件后缀
 	name := NameWithoutExtension(filename) // 只有文件名，没有后缀
 	// 将原始文件名加密成 md5 然后拼接当前时间和随机字符串作为新的文件名
-	newName := strx.StrRandomString(8) + "-" + helper.EncodeMD5(name) + "-" + time.Now().Format("20060102150405")
+	newName := strx.StrRandomOptionalString(8, strx.LowerCase+strx.UpperCase) + "-" + helper.EncodeMD5(name) + "-" + time.Now().Format("20060102150405")
 
 	// 新的文件名称
 	return newName + ext

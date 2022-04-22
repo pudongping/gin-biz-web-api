@@ -23,7 +23,7 @@ var genJwtKeyCmd = &cobra.Command{
 	Short:   "generate JWT's secret key",
 	Example: "go run main.go generate jwt-key",
 	Run: func(cmd *cobra.Command, args []string) {
-		console.Success("JWT Key is : %v", strx.StrRandomString(32))
+		console.Success("JWT Key is : %v", strx.StrRandomOptionalString(32, strx.LowerCase+strx.UpperCase))
 	},
 }
 
