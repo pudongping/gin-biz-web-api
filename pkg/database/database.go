@@ -152,7 +152,7 @@ func CurrentDatabase(group ...string) string {
 }
 
 // TableName 获取当前对象的表名称
-// eg：database.TableName(&user_model.User{})
+// eg：database.TableName(&model.User{})
 // output: "users"
 func TableName(obj interface{}, group ...string) string {
 	db := Instance(group...).DB

@@ -3,9 +3,11 @@ package auth_ctrl
 import (
 	"github.com/gin-gonic/gin"
 
-	"gin-biz-web-api/model/user_model"
+	"gin-biz-web-api/model"
 	"gin-biz-web-api/pkg/auth"
+	"gin-biz-web-api/pkg/database"
 	"gin-biz-web-api/pkg/errcode"
+	"gin-biz-web-api/pkg/paginator"
 	"gin-biz-web-api/pkg/responses"
 )
 
@@ -18,11 +20,9 @@ func (ctrl *UserController) Index(c *gin.Context) {
 
 	response := responses.New(c)
 
-	// var users []user_model.User
-	// query := database.DB.Model(user_model.User{}).Where("id >= ?", 3)
-	// paginate := paginator.Paginate(c, query, &users, 3)
-
-	users, paginate := user_model.Paginate(c)
+	var users []model.User
+	query := database.DB.Model(model.User{}).Where("id >= ?", 3)
+	paginate := paginator.Paginate(c, query, &users, 3)
 
 	if len(users) == 0 {
 		response.ToErrorResponse(errcode.NotFound.Msgf("用户"))

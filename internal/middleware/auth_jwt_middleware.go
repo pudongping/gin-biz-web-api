@@ -4,7 +4,8 @@ package middleware
 import (
 	"github.com/gin-gonic/gin"
 
-	"gin-biz-web-api/model/user_model"
+	"gin-biz-web-api/model"
+	"gin-biz-web-api/pkg/database"
 	"gin-biz-web-api/pkg/errcode"
 	"gin-biz-web-api/pkg/jwt"
 	"gin-biz-web-api/pkg/responses"
@@ -25,7 +26,8 @@ func AuthJWT() gin.HandlerFunc {
 		}
 
 		// jwt 解析成功，设置用户信息
-		user := user_model.GetOne(claims.UserID)
+		var user model.User
+		database.DB.First(&user, claims.UserID)
 		if user.ID == 0 {
 			response.ToErrorResponse(errcode.Unauthorized, "找不到对应用户")
 			return

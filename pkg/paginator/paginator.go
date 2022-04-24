@@ -46,8 +46,8 @@ type Paginator struct {
 // data 传地址获取数据
 // perPage 每页显示数，变长参数，如果不传时，优先使用链接地址中的 per_page 的值，如果都没有则使用默认值
 // 使用示例：
-// 	var users []user_model.User
-//	query := database.DB.Model(user_model.User{}).Where("id >= ?", 3)
+// 	var users []model.User
+//	query := database.DB.Model(model.User{}).Where("id >= ?", 3)
 //	paginate := paginator.Paginate(c, query, &users, 3)
 func Paginate(c *gin.Context, db *gorm.DB, data interface{}, perPage ...int) Pagination {
 
