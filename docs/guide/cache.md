@@ -19,20 +19,21 @@ cache.Forever("key", "value")
 
 // 保存一个任意值
 // 例如：保存一个用户对象实例
-user := user_model.User{
+user := model.User{
 	ID: 1,
 	Name: "alex",
 }
 cache.Set("obj", user, 0)
 
 // 取出一个对象实例
-var user user_model.User
+var user model.User
 cache.GetObject("obj", &user)
 fmt.Println(user)
 
 
 // 保存所有的用户信息
-users := user_model.All()  // 从数据库中取出所有的用户信息
+var users []model.User
+database.DB.Find(&users)  // 从数据库中取出所有的用户信息
 // 将所有的用户信息保存到缓存中
 cache.Set("users", users, 0)
 // 打印出缓存里面的所有用户信息
@@ -41,9 +42,9 @@ fmt.Println(cache.Get("users"))
 // 可以通过以下示例代码反序列化出来
 cacheUsers := cache.Get("users")
 
-var cacheAllUsers []user_model.User
+var cacheAllUsers []model.User
 for _, v := range cacheUsers.([]interface{}) {
-    var userItem user_model.User
+    var userItem model.User
     
     vv, _ := json.Marshal(v)
     _ = json.Unmarshal(vv, &userItem)
