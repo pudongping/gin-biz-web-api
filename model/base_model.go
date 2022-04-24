@@ -3,6 +3,7 @@ package model
 
 import (
 	"database/sql/driver"
+	"errors"
 	"fmt"
 	"time"
 
@@ -15,6 +16,9 @@ type TimeNormal struct {
 
 // MarshalJSON 将时间字段转换为 `%Y-%m-%d %H:%M:%S` 格式
 func (t TimeNormal) MarshalJSON() ([]byte, error) {
+	if y := t.Year(); y < 0 || y >= 10000 {
+		return nil, errors.New("TimeNormal.MarshalJSON: year outside of range [0,9999]")
+	}
 	tune := t.Format(`"2006-01-02 15:04:05"`)
 	return []byte(tune), nil
 }
