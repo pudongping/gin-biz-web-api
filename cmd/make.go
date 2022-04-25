@@ -3,6 +3,7 @@ package cmd
 import (
 	"fmt"
 	"os/exec"
+	"strings"
 
 	"github.com/spf13/cobra"
 
@@ -11,7 +12,6 @@ import (
 	"gin-biz-web-api/pkg/config"
 	"gin-biz-web-api/pkg/console"
 	"gin-biz-web-api/pkg/file"
-	"gin-biz-web-api/pkg/helper/arrayx"
 )
 
 var MakeCmd = &cobra.Command{
@@ -68,7 +68,7 @@ func runMakeModel(cmd *cobra.Command, args []string) {
 	}
 
 	//  /Users/pudongping/glory/codes/golang/gin-biz-web-api/scripts/darwin/go-tour sql struct --username root --password 123456 --db gin_biz_web_api --table users
-	console.Warning("Now execute script: %v %v", script, arrayx.Array2Str(params, " "))
+	console.Warning("Now execute script: %v %v", script, strings.Join(params, " "))
 
 	result, err := exec.Command(script, params...).Output()
 	console.ExitIf(err)

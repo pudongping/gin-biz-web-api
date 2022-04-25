@@ -3,6 +3,7 @@ package cmd
 
 import (
 	"os"
+	"strings"
 
 	"github.com/spf13/cobra"
 
@@ -35,7 +36,7 @@ func RegisterDefaultCmd(rootCmd *cobra.Command, subCmd *cobra.Command) {
 	// 只有没有参数时、或者参数不为 `-h` 和 `--help` 时才设置 root cmd 的参数
 	if err == nil && cmd.Use == rootCmd.Use && firstArg != "-h" && firstArg != "--help" {
 		args := append([]string{subCmd.Use}, argsWithoutFirstElement...)
-		console.Warning("default run command: %v", arrayx.Array2Str(args, " "))
+		console.Warning("default run command: %v", strings.Join(args, " "))
 		// 重新设置参数，比如：`server --port=8081 --mode=test`
 		rootCmd.SetArgs(args)
 	}
