@@ -53,9 +53,9 @@ type BaseModel struct {
 // CommonTimestampsField 时间戳字段
 type CommonTimestampsField struct {
 	// 创建时间  int(11) unsigned is_nullable NO
-	CreatedAt int64 `json:"created_at"`
+	CreatedAt int `json:"created_at"`
 	// 更新时间  int(11) unsigned is_nullable NO
-	UpdatedAt int64 `json:"updated_at"`
+	UpdatedAt int `json:"updated_at"`
 }
 
 // GetStringID 获取 ID 的字符串格式
