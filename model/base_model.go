@@ -46,16 +46,16 @@ func (t *TimeNormal) Scan(v interface{}) error {
 
 // BaseModel 模型基类
 type BaseModel struct {
-	// 主键 id  bigint(20) unsigned is_nullable NO
-	ID uint `gorm:"primaryKey;autoIncrement;" json:"id"`
+	// 主键 id  auto_increment PRI bigint(20) unsigned is_nullable: NO
+	ID uint `gorm:"column:id;primaryKey;autoIncrement;" json:"id"`
 }
 
 // CommonTimestampsField 时间戳字段
 type CommonTimestampsField struct {
-	// 创建时间  int(11) unsigned is_nullable NO
-	CreatedAt int `json:"created_at"`
-	// 更新时间  int(11) unsigned is_nullable NO
-	UpdatedAt int `json:"updated_at"`
+	// 创建时间    int(11) unsigned is_nullable: NO  default_value: 0
+	CreatedAt int `gorm:"column:created_at;" json:"created_at"`
+	// 更新时间    int(11) unsigned is_nullable: NO  default_value: 0
+	UpdatedAt int `gorm:"column:updated_at;" json:"updated_at"`
 }
 
 // GetStringID 获取 ID 的字符串格式

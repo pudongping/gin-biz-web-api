@@ -9,26 +9,26 @@ import (
 type User struct {
 	*BaseModel
 
-	// 账号  varchar(255) is_nullable NO
-	Account string `json:"account"`
-	// 邮箱  varchar(80) is_nullable YES
-	Email string `json:"email"`
-	// 手机号  varchar(40) is_nullable YES
-	Phone string `json:"phone"`
-	// 密码  varchar(255) is_nullable NO
-	Password string `json:"password"`
-	// 省份  varchar(20) is_nullable NO
-	Province string `json:"province"`
-	// 市区  varchar(40) is_nullable NO
-	City string `json:"city"`
-	// 区县  varchar(255) is_nullable NO
-	Country string `json:"country"`
-	// 昵称  varchar(255) is_nullable NO
-	Nickname string `json:"nickname"`
-	// 自我简介  text is_nullable YES
-	Introduction string `json:"introduction"`
-	// 头像地址  varchar(255) is_nullable NO
-	Avatar string `json:"avatar"`
+	// 账号   UNI varchar(255) is_nullable: NO
+	Account string `gorm:"column:account;unique;" json:"account"`
+	// 邮箱   UNI varchar(80) is_nullable: YES
+	Email string `gorm:"column:email;unique;" json:"email"`
+	// 手机号   UNI varchar(40) is_nullable: YES
+	Phone string `gorm:"column:phone;unique;" json:"phone"`
+	// 密码    varchar(255) is_nullable: NO
+	Password string `gorm:"column:password;" json:"password"`
+	// 省份    varchar(20) is_nullable: NO
+	Province string `gorm:"column:province;" json:"province"`
+	// 市区    varchar(40) is_nullable: NO
+	City string `gorm:"column:city;" json:"city"`
+	// 区县    varchar(255) is_nullable: NO
+	Country string `gorm:"column:country;" json:"country"`
+	// 昵称   MUL varchar(255) is_nullable: NO
+	Nickname string `gorm:"column:nickname;" json:"nickname"`
+	// 自我简介    text is_nullable: YES
+	Introduction string `gorm:"column:introduction;" json:"introduction"`
+	// 头像地址    varchar(255) is_nullable: NO
+	Avatar string `gorm:"column:avatar;" json:"avatar"`
 
 	*CommonTimestampsField
 }
