@@ -2,8 +2,8 @@ App:
   Name: gin-biz-web-api # 项目名称，会在缓存中用到
   Env: local # 当前项目运行环境
   Debug: true # 只有开启 debug 模式时，日志记录才会有换行且高亮
-  Url: http://localhost:3000 # http 服务的访问地址
-  Port: 3000 # 默认的 HTTP 监听端口
+  Url: http://localhost:8501 # http 服务的访问地址
+  Port: 8501 # 默认的 HTTP 监听端口
   GinRunMode: debug # 设置 gin 框架的运行模式
   ContextTimeout: 60 # 上下文超时时间，单位：s
 Log:
