@@ -2,13 +2,14 @@
 package upload
 
 import (
-	"errors"
 	"fmt"
 	"mime/multipart"
 	"os"
 	"path"
 	"path/filepath"
 	"strings"
+
+	"github.com/pkg/errors"
 
 	"github.com/disintegration/imaging"
 
@@ -30,6 +31,7 @@ type FileInfo struct {
 	OriginFileName string `json:"origin_file_name"` // 原始文件名
 	FileName       string `json:"file_name"`        // 文件名
 	AbsPath        string `json:"abs_path"`         // 文件绝对路径（相对本项目的绝对路径）
+	AccessPath     string `json:"access_path"`      // 静态资源访问连接
 	AccessUrl      string `json:"access_url"`       // 文件资源访问地址
 }
 
@@ -77,16 +79,18 @@ func SaveUploadFile(fileType FileType, files multipart.File, fileHeader *multipa
 
 	// http://localhost:3000/static/image/2022/03/19/c20ad4d76fe97759aa27a0c99bff6710-20220319023344.jpg
 	accessUrl := fmt.Sprintf(
-		"%s/%s/%s",
-		app.URL(config.GetString("cfg.upload.static_fs_relative_path")), // `http://localhost:3000/static`
-		dirName,                                                     // `image/2022/03/19`
-		fileName,                                                    // `c20ad4d76fe97759aa27a0c99bff6710-20220319023344.jpg`
+		"/%s/%s",
+		dirName,  // `image/2022/03/19`
+		fileName, // `c20ad4d76fe97759aa27a0c99bff6710-20220319023344.jpg`
 	)
+
+	accessPath := app.URL(config.GetString("cfg.upload.static_fs_relative_path")) // `http://localhost:3000/static`
 
 	return &FileInfo{
 		OriginFileName: fileHeader.Filename,
 		FileName:       fileName,
 		AbsPath:        dst,
+		AccessPath:     accessPath,
 		AccessUrl:      accessUrl,
 	}, nil
 
@@ -139,7 +143,7 @@ func TailoringImage(fileType FileType, fileHeader *multipart.FileHeader, src str
 
 	// 重新生成文件名 eg：`PqOem-c20ad4d76fe97759aa27a0c99bff6710-20220319015124.jpg`
 	fileName := file.GenNewFileName(fileHeader.Filename)
-	publicPath := config.GetString("cfg.upload.save_path")                                      // `public/uploads`
+	publicPath := config.GetString("cfg.upload.save_path")                                  // `public/uploads`
 	dirName := fmt.Sprintf("%s/%s", fileType, app.TimeNowInTimezone().Format("2006/01/02")) // `image/2022/03/19`
 
 	// 保存路径 eg：`public/uploads/image/2022/03/19/PqOem-c20ad4d76fe97759aa27a0c99bff6710-20220319015124.jpg`
@@ -153,15 +157,17 @@ func TailoringImage(fileType FileType, fileHeader *multipart.FileHeader, src str
 
 	// http://localhost:3000/static/image/2022/03/19/PqOem-c20ad4d76fe97759aa27a0c99bff6710-20220319023344.jpg
 	accessUrl := fmt.Sprintf(
-		"%s/%s/%s",
-		app.URL(config.GetString("cfg.upload.static_fs_relative_path")), // `http://localhost:3000/static`
-		dirName,                                                     // `image/2022/03/19`
-		fileName,                                                    // `PqOem-c20ad4d76fe97759aa27a0c99bff6710-20220319023344.jpg`
+		"/%s/%s",
+		dirName,  // `image/2022/03/19`
+		fileName, // `PqOem-c20ad4d76fe97759aa27a0c99bff6710-20220319023344.jpg`
 	)
+
+	accessPath := app.URL(config.GetString("cfg.upload.static_fs_relative_path")) // `http://localhost:3000/static`
 
 	fileInfo.OriginFileName = fileHeader.Filename
 	fileInfo.FileName = fileName
 	fileInfo.AbsPath = filePath
+	fileInfo.AccessPath = accessPath
 	fileInfo.AccessUrl = accessUrl
 
 	return &fileInfo, nil
