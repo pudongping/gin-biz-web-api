@@ -3,9 +3,10 @@ package model
 
 import (
 	"database/sql/driver"
-	"errors"
 	"fmt"
 	"time"
+
+	"github.com/pkg/errors"
 
 	"github.com/spf13/cast"
 )

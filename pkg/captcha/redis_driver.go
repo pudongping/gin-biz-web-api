@@ -2,7 +2,8 @@
 package captcha
 
 import (
-	"errors"
+	"github.com/pkg/errors"
+
 	"time"
 
 	"gin-biz-web-api/pkg/config"

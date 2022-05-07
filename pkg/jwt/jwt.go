@@ -2,8 +2,9 @@
 package jwt
 
 import (
-	"errors"
 	"time"
+
+	"github.com/pkg/errors"
 
 	"github.com/gin-gonic/gin"
 	jwtPkg "github.com/golang-jwt/jwt"

@@ -2,7 +2,7 @@
 package auth
 
 import (
-	"errors"
+	"github.com/pkg/errors"
 
 	"github.com/gin-gonic/gin"
 	"github.com/spf13/cast"

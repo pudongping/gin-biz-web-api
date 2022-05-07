@@ -2,7 +2,8 @@
 package validator
 
 import (
-	"errors"
+	"github.com/pkg/errors"
+
 	"fmt"
 	"strings"
 
@@ -42,7 +43,7 @@ func init() {
 			if message != "" {
 				return errors.New(message)
 			}
-			return fmt.Errorf("字段 %s 为 %v 的值不存在", field, value)
+			return errors.Errorf("字段 %s 为 %v 的值不存在", field, value)
 		}
 		return nil
 	})
@@ -96,7 +97,7 @@ func init() {
 				return errors.New(message)
 			}
 			// 默认的错误消息
-			return fmt.Errorf("字段 %s 为 %v 的值已被占用", field, value)
+			return errors.Errorf("字段 %s 为 %v 的值已被占用", field, value)
 		}
 		// 验证通过
 		return nil

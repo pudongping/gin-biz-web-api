@@ -1,7 +1,8 @@
 package validator
 
 import (
-	"errors"
+	"github.com/pkg/errors"
+
 	"fmt"
 	"reflect"
 	"strings"
@@ -54,7 +55,7 @@ func init() {
 			if message != "" {
 				return errors.New(message)
 			}
-			return fmt.Errorf("字段 %s 的值不合法", field)
+			return errors.Errorf("字段 %s 的值不合法", field)
 		}
 
 		return nil
