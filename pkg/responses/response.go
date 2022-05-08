@@ -2,6 +2,7 @@
 package responses
 
 import (
+	"fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -58,6 +59,10 @@ func (r *Response) ToErrorResponse(err *errcode.Error, messages ...string) {
 		} else {
 			logger.ErrorJSON("ToErrorResponse", "details", details)
 		}
+	}
+
+	if r.isShowDetails() && err.Err() != nil {
+		fmt.Printf("原始错误详情信息 ====> %+v", err.Err())
 	}
 
 	// r.Ctx.JSON(err.HttpStatusCode(), response)

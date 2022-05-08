@@ -3,6 +3,7 @@ package validator
 
 import (
 	"github.com/gin-gonic/gin"
+	"github.com/pkg/errors"
 	"github.com/thedevsaddam/govalidator"
 
 	"gin-biz-web-api/pkg/errcode"
@@ -19,7 +20,7 @@ func BindAndValidate(c *gin.Context, obj interface{}, handler ValidateFunc) bool
 	// 解析请求，支持 JSON 数据、表单请求和 URL Query
 	// 参见：[gin 框架中文文档](https://www.kancloud.cn/shuangdeyu/gin_book/949426)
 	if err := c.ShouldBind(obj); err != nil {
-		response.ToErrorResponse(errcode.BadRequest.WithDetails(err.Error()), "请求体解析错误，请确认请求格式是否正确")
+		response.ToErrorResponse(errcode.BadRequest.WithDetails(err.Error()).WithError(errors.WithStack(err)), "请求体解析错误，请确认请求格式是否正确")
 		return false
 	}
 
