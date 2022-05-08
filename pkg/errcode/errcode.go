@@ -12,6 +12,8 @@ type Error struct {
 	msg string
 	// 详细信息
 	details []string
+	// 记录原始错误
+	err error
 }
 
 // 用于保存所有的错误码和错误提示信息
@@ -64,6 +66,18 @@ func (e *Error) WithDetails(details ...string) *Error {
 	}
 
 	return &newError
+}
+
+// WithError 用以追加原始错误
+func (e *Error) WithError(err error) *Error {
+	newError := *e
+	newError.err = err
+	return &newError
+}
+
+// Err 返回原始错误
+func (e *Error) Err() error {
+	return e.err
 }
 
 // Error 打印出错误码和错误提示信息
