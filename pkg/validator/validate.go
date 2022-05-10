@@ -50,6 +50,18 @@ func Validate(data interface{}, rules govalidator.MapData, messages govalidator.
 	return govalidator.New(opts).ValidateStruct()
 }
 
+// ValidateStruct 验证已有的结构体数据
+func ValidateStruct(data interface{}, rules govalidator.MapData, messages govalidator.MapData) map[string][]string {
+	opts := govalidator.Options{
+		Data:          data,
+		Rules:         rules,
+		Messages:      messages,
+		TagIdentifier: "valid", // 结构体中标签标识符
+	}
+
+	return govalidator.New(opts).ValidateStruct()
+}
+
 // ValidateFile 验证器内部使用，用于验证文件
 func ValidateFile(c *gin.Context, data interface{}, rules govalidator.MapData, messages govalidator.MapData) map[string][]string {
 	opts := govalidator.Options{
