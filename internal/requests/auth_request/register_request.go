@@ -53,7 +53,7 @@ func SignupUsingEmail(data interface{}, c *gin.Context) map[string][]string {
 		},
 	}
 
-	errs := validator.Validate(data, rules, messages)
+	errs := validator.ValidateStruct(data, rules, messages)
 
 	req := data.(*SignupUsingEmailRequest)
 	errs = validator.ValidatePasswordConfirm(req.Password, req.PasswordConfirm, errs) // 验证两次密码是否一致

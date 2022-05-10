@@ -30,7 +30,7 @@ func VerifyCaptchaCode(data interface{}, c *gin.Context) map[string][]string {
 		},
 	}
 
-	errs := validator.Validate(data, rules, messages)
+	errs := validator.ValidateStruct(data, rules, messages)
 
 	req := data.(*VerifyCaptchaCodeRequest)
 	errs = validator.ValidateCaptcha(req.CaptchaID, req.CaptchaAnswer, errs)

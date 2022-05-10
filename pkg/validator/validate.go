@@ -10,10 +10,10 @@ import (
 	"gin-biz-web-api/pkg/responses"
 )
 
-// ValidateFunc 验证器的函数
+// ValidateFunc 验证器中的验证方法
 type ValidateFunc func(interface{}, *gin.Context) map[string][]string
 
-// BindAndValidate 控制器中调用
+// BindAndValidate 绑定并调用验证器方法验证参数
 func BindAndValidate(c *gin.Context, obj interface{}, handler ValidateFunc) bool {
 	response := responses.New(c)
 
@@ -24,7 +24,7 @@ func BindAndValidate(c *gin.Context, obj interface{}, handler ValidateFunc) bool
 		return false
 	}
 
-	// 表单验证
+	// 调用表单验证
 	errs := handler(obj, c)
 
 	// 判断验证是否通过
@@ -36,21 +36,39 @@ func BindAndValidate(c *gin.Context, obj interface{}, handler ValidateFunc) bool
 	return true
 }
 
-// Validate 验证器内部使用，用于验证表单数据
-func Validate(data interface{}, rules govalidator.MapData, messages govalidator.MapData) map[string][]string {
+// Validate 验证 form-data, x-www-form-urlencoded 和 query 传参类型的参数
+// 如果要验证文件时 ref： https://github.com/thedevsaddam/govalidator/blob/master/doc/FILE_VALIDATION.md
+func Validate(c *gin.Context, rules govalidator.MapData, messages govalidator.MapData) map[string][]string {
 	// 配置初始化
 	opts := govalidator.Options{
+		Request:         c.Request, // 请求实例对象
+		Rules:           rules,     // 验证规则
+		Messages:        messages,  // 自定义错误消息
+		RequiredDefault: true,      // 所有的字段都要通过验证规则
+		TagIdentifier:   "valid",   // 结构体中标签标识符
+	}
+
+	// 开始验证
+	return govalidator.New(opts).Validate()
+}
+
+// ValidateJSON 验证 application/json 或者 text/plain 请求体数据，并绑定到指定结构上（比如：结构体、map）
+// 绑定到结构体上 document link：https://github.com/thedevsaddam/govalidator/blob/master/doc/SIMPLE_STRUCT_VALIDATION.md
+// 绑定到 map 上 document link：https://github.com/thedevsaddam/govalidator/blob/master/doc/MAP_VALIDATION.md
+func ValidateJSON(c *gin.Context, data interface{}, rules govalidator.MapData, messages govalidator.MapData) map[string][]string {
+	opts := govalidator.Options{
 		Data:          data,
+		Request:       c.Request,
 		Rules:         rules,
 		Messages:      messages,
 		TagIdentifier: "valid", // 结构体中标签标识符
 	}
 
-	// 开始验证
-	return govalidator.New(opts).ValidateStruct()
+	return govalidator.New(opts).ValidateJSON()
 }
 
 // ValidateStruct 验证已有的结构体数据
+// document link： https://github.com/thedevsaddam/govalidator/blob/master/doc/STRUCT_VALIDATION.md
 func ValidateStruct(data interface{}, rules govalidator.MapData, messages govalidator.MapData) map[string][]string {
 	opts := govalidator.Options{
 		Data:          data,
@@ -60,18 +78,4 @@ func ValidateStruct(data interface{}, rules govalidator.MapData, messages govali
 	}
 
 	return govalidator.New(opts).ValidateStruct()
-}
-
-// ValidateFile 验证器内部使用，用于验证文件
-func ValidateFile(c *gin.Context, data interface{}, rules govalidator.MapData, messages govalidator.MapData) map[string][]string {
-	opts := govalidator.Options{
-		Data:          data,
-		Request:       c.Request,
-		Rules:         rules,
-		Messages:      messages,
-		TagIdentifier: "valid", // 结构体中标签标识符
-	}
-
-	// 调用 govalidator 的 Validate 方法来验证文件
-	return govalidator.New(opts).Validate()
 }
