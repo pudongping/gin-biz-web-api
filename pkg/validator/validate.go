@@ -41,11 +41,11 @@ func BindAndValidate(c *gin.Context, obj interface{}, handler ValidateFunc) bool
 func Validate(c *gin.Context, rules govalidator.MapData, messages govalidator.MapData) map[string][]string {
 	// 配置初始化
 	opts := govalidator.Options{
-		Request:         c.Request, // 请求实例对象
-		Rules:           rules,     // 验证规则
-		Messages:        messages,  // 自定义错误消息
-		RequiredDefault: true,      // 所有的字段都要通过验证规则
-		TagIdentifier:   "valid",   // 结构体中标签标识符
+		Request:  c.Request, // 请求实例对象
+		Rules:    rules,     // 验证规则
+		Messages: messages,  // 自定义错误消息
+		// RequiredDefault: true,      // 所有的字段都要通过验证规则
+		TagIdentifier: "valid", // 结构体中标签标识符
 	}
 
 	// 开始验证
