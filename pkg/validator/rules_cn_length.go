@@ -22,7 +22,7 @@ func init() {
 			if message != "" {
 				return errors.New(message)
 			}
-			return errors.Errorf("长度需大于 %d 个字", l)
+			return errors.Errorf("长度需大于 %d 个字符", l)
 		}
 
 		return nil
@@ -36,7 +36,7 @@ func init() {
 			if message != "" {
 				return errors.New(message)
 			}
-			return errors.Errorf("长度不能超过 %d 个字", l)
+			return errors.Errorf("长度不能超过 %d 个字符", l)
 		}
 
 		return nil
