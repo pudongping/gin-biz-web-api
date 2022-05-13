@@ -32,10 +32,14 @@ func Empty(val interface{}) bool {
 }
 
 // DeepClone 深拷贝对象
-func DeepClone(obj interface{}) (wanted interface{}, err error) {
-	var b []byte
-	b, err = json.Marshal(obj)
-	err = json.Unmarshal(b, &wanted)
-
-	return
+func DeepClone(src, dst interface{}) error {
+	bytes, err := json.Marshal(src)
+	if err != nil {
+		return err
+	}
+	err = json.Unmarshal(bytes, dst)
+	if err != nil {
+		return err
+	}
+	return nil
 }
