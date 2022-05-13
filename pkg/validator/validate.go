@@ -19,6 +19,7 @@ func BindAndValidate(c *gin.Context, obj interface{}, handler ValidateFunc) bool
 
 	// 解析请求，支持 JSON 数据、表单请求和 URL Query
 	// 参见：[gin 框架中文文档](https://www.kancloud.cn/shuangdeyu/gin_book/949426)
+	// ShouldBindBodyWith https://github.com/gin-gonic/gin/pull/1341
 	if err := c.ShouldBind(obj); err != nil {
 		response.ToErrorResponse(errcode.BadRequest.WithDetails(err.Error()).WithError(errors.WithStack(err)), "请求体解析错误，请确认请求格式是否正确")
 		return false
@@ -67,7 +68,7 @@ func ValidateJSON(c *gin.Context, data interface{}, rules govalidator.MapData, m
 	return govalidator.New(opts).ValidateJSON()
 }
 
-// ValidateStruct 验证已有的结构体数据
+// ValidateStruct 验证已有的结构体数据（不支持验证含有指针变量的结构体，但是支持验证 map[string]interface{}）
 // document link： https://github.com/thedevsaddam/govalidator/blob/master/doc/STRUCT_VALIDATION.md
 func ValidateStruct(data interface{}, rules govalidator.MapData, messages govalidator.MapData) map[string][]string {
 	opts := govalidator.Options{
