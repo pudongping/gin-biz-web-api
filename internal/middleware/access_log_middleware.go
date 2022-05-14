@@ -84,12 +84,15 @@ func AccessLog() gin.HandlerFunc {
 			// zap.String("response_body", responseBodyWriter.body.String()), // 当前的请求结果响应体
 		}
 
-		// 如果是上传文件，那么则不记录请求参数内容
-		if !strings.HasPrefix(c.Request.Header.Get("Content-Type"), "multipart/form-data") {
-			// 请求的内容 eg：`"x=33&y=zz"`
-			requestBodyDecode, _ := url.QueryUnescape(string(requestBody)) // 中文会被加码，因此为了方便查看中文参数，对请求体进行解码
-			logFields = append(logFields, zap.String("request_body", requestBodyDecode))
+		// 记录请求体内容 eg：`"x=33&y=zz"`
+		var logRequestBody string
+		if "multipart/form-data" == c.ContentType() {
+			// 上传文件时，不会记录上传文件资源数据
+			logRequestBody = c.Request.PostForm.Encode()
+		} else {
+			logRequestBody, _ = url.QueryUnescape(string(requestBody)) // 中文会被加码，因此为了方便查看中文参数，对请求体进行解码
 		}
+		logFields = append(logFields, zap.String("request_body", logRequestBody))
 
 		// 响应的内容
 		logFields = append(logFields, zap.String("response_body", responseBodyWriter.body.String()))
