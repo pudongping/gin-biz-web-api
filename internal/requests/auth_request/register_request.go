@@ -56,8 +56,8 @@ func SignupUsingEmail(data interface{}, c *gin.Context) map[string][]string {
 	errs := validator.ValidateStruct(data, rules, messages)
 
 	req := data.(*SignupUsingEmailRequest)
-	errs = validator.ValidatePasswordConfirm(req.Password, req.PasswordConfirm, errs) // 验证两次密码是否一致
-	errs = validator.ValidateVerifyCode(req.Email, req.VerifyCode, errs)              // 验证邮件验证码是否正确
+	errs = validator.ValidationPasswordConfirm(req.Password, req.PasswordConfirm, errs) // 验证两次密码是否一致
+	errs = validator.ValidationVerifyCode(req.Email, req.VerifyCode, errs)              // 验证邮件验证码是否正确
 
 	return errs
 }
