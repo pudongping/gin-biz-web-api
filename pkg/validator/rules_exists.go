@@ -72,6 +72,10 @@ func init() {
 
 		// 如果只有 3 个参数时，默认第 3 个参数的值为 id 的值
 		if len(sl) == 3 {
+			// 如果第 3 个参数的值为空值时，不做校验
+			if helper.Empty(sl[2]) {
+				return nil
+			}
 			query.Where("id != ?", sl[2])
 		}
 
@@ -79,10 +83,22 @@ func init() {
 		if len(sl) > 3 {
 			sl1 := sl[2:]
 			sl2 := arrayx.ArrayChunkString(sl1, 2)
+			var sl3 []struct{} // 用于记录是否有不为零值的排除条件
 			for _, except := range sl2 {
-				if len(except) == 2 {
+				// 并且值不能为空值，才能做校验
+				if len(except) == 2 && !helper.Empty(except[1]) {
 					query.Where(fmt.Sprintf("%s != ?", except[0]), except[1])
+					sl3 = append(sl3, struct{}{})
 				}
+			}
+			// 参数多于 3 个时，证明一定有排除条件，但是如果排除条件均为零值时，则不做校验
+			// 因为很难得分辨出是否是因为其它字段没有传递或者因为其它字段验证失败，从而导致
+			// not_exists 规则上的字段报错
+			// 比如：字段 `user_id` 为必填
+			// `not_exists:users,account,user_id,c.Query("user_id")`
+			// 那么 sql 语句，很有可能就会变成 `SELECT count(*) FROM `users` WHERE `account` = 'xxxxx' AND user_id != '0'`
+			if len(sl3) == 0 {
+				return nil
 			}
 		}
 
