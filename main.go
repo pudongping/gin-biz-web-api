@@ -80,10 +80,10 @@ func registerChildrenCmd() {
 func printBuildInfo() bool {
 	args := os.Args
 	if len(args) == 2 && (args[1] == "--version" || args[1] == "-v") {
-		console.Info("Build Time: %s", buildTime)
-		console.Info("Build Version: %s", buildVersion)
-		console.Info("Build Go Version: %s", goVersion)
-		console.Info("Build Git Commit Hash ID: %s", gitCommitID)
+		console.Info("Build Time:                %s", buildTime)
+		console.Info("Build Version:             %s", buildVersion)
+		console.Info("Build Go Version:          %s", goVersion)
+		console.Info("Build Git Commit Hash ID:  %s", gitCommitID)
 		return true
 	}
 
