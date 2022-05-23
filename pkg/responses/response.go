@@ -45,14 +45,20 @@ func (r *Response) ToResponseWithPagination(result interface{}, pagination pagin
 }
 
 // ToErrorResponse 错误返回
-func (r *Response) ToErrorResponse(err *errcode.Error, messages ...string) {
-	response := gin.H{"code": err.Code(), "msg": err.Msg()}
+func (r *Response) ToErrorResponse(err error, messages ...string) {
+	var e = errcode.InternalServerError.WithError(err).WithDetails(err.Error())
+
+	if customErr, ok := err.(*errcode.Error); ok {
+		e = customErr
+	}
+
+	response := gin.H{"code": e.Code(), "msg": e.Msg()}
 
 	if len(messages) > 0 {
 		response["msg"] = messages[0]
 	}
 
-	details := err.Details()
+	details := e.Details()
 	if len(details) > 0 {
 		if r.isShowDetails() {
 			response["details"] = details
@@ -61,8 +67,8 @@ func (r *Response) ToErrorResponse(err *errcode.Error, messages ...string) {
 		}
 	}
 
-	if r.isShowDetails() && err.Err() != nil {
-		fmt.Printf("原始错误详情信息 ====> %+v", err.Err())
+	if r.isShowDetails() && e.Err() != nil {
+		fmt.Printf("原始错误详情信息 ====> %+v \n", e.Err())
 	}
 
 	// r.Ctx.JSON(err.HttpStatusCode(), response)
@@ -74,7 +80,7 @@ func (r *Response) ToErrorResponse(err *errcode.Error, messages ...string) {
 // 返回的 json 示例为：
 // {
 //    "code": 100422,
-//    "errors": {
+//    "details": {
 //        "account": [
 //            "账号为必填项",
 //            "账号格式错误，只允许数字和英文",
