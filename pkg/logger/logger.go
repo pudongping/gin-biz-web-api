@@ -1,4 +1,4 @@
-// 日志处理相关逻辑
+// Package logger 日志处理相关逻辑
 package logger
 
 import (
@@ -17,6 +17,9 @@ import (
 
 // Logger 全局 Logger 对象
 var Logger *zap.Logger
+
+// LogPath 日志文件路径
+const LogPath = "storage/logs/"
 
 // InitLogger 日志初始化
 func InitLogger(filename string, maxSize, maxBackup, maxAge int, compress bool, logType string, level string) {
@@ -96,12 +99,12 @@ func getLogWriter(filename string, maxSize, maxBackup, maxAge int, compress bool
 
 	// 滚动日志，详见 config/log.go 配置文件
 	lumberJackLogger := &lumberjack.Logger{
-		Filename:   filename,  // 文件路径
-		MaxSize:    maxSize,   // 单个文件最大尺寸，默认单位为 M
-		MaxAge:     maxAge,    // 日志文件最大生存周期，默认单位为：天 day
-		MaxBackups: maxBackup, // 最多保存多少个备份文件
-		Compress:   compress,  // 是否压缩
-		LocalTime:  true,      // 设置日志文件名的时间格式为本地时间
+		Filename:   LogPath + filename, // 文件路径
+		MaxSize:    maxSize,            // 单个文件最大尺寸，默认单位为 M
+		MaxAge:     maxAge,             // 日志文件最大生存周期，默认单位为：天 day
+		MaxBackups: maxBackup,          // 最多保存多少个备份文件
+		Compress:   compress,           // 是否压缩
+		LocalTime:  true,               // 设置日志文件名的时间格式为本地时间
 	}
 
 	if app.IsDebug() {

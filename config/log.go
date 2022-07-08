@@ -24,8 +24,8 @@ func init() {
 
 			/* ------------------ 滚动日志配置 ------------------ */
 			// document link：https://github.com/natefinch/lumberjack/tree/v2.1
-			// 日志文件路径
-			"filename": config.Get("Log.Filename", "storage/logs/logs.log"),
+			// 日志文件名称
+			"filename": config.Get("Log.Filename", "logs.log"),
 			// 每个日志文件保存的最大尺寸 单位：M
 			"max_size": config.Get("Log.MaxSize", 64),
 			// 最多保存日志文件数，0 为不限，MaxAge 到了还是会删
