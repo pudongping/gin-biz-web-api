@@ -15,6 +15,7 @@ require (
 	github.com/kr/pretty v0.3.0 // indirect
 	github.com/mojocn/base64Captcha v1.3.5
 	github.com/pkg/errors v0.9.1 // indirect
+	github.com/robfig/cron/v3 v3.0.0 // indirect
 	github.com/rogpeppe/go-internal v1.8.0 // indirect
 	github.com/shirou/gopsutil v3.21.11+incompatible
 	github.com/spf13/cast v1.4.1
