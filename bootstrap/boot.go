@@ -4,7 +4,6 @@ package bootstrap
 import (
 	"fmt"
 
-	"gin-biz-web-api/crontab"
 	"gin-biz-web-api/global"
 	"gin-biz-web-api/pkg/console"
 )
@@ -30,5 +29,5 @@ func Initialize() {
 	setupCache()
 
 	// 启动 crontab
-	crontab.Run()
+	setupCrontab()
 }

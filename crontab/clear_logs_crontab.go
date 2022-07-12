@@ -5,11 +5,11 @@ import (
 	"gin-biz-web-api/pkg/logger"
 )
 
-type clearLogsCrontab struct {
+type ClearLogsCrontab struct {
 }
 
 // Run 按日期轮转日志文件
-func (c clearLogsCrontab) Run() {
+func (c ClearLogsCrontab) Run() {
 	if "daily" != config.GetString("cfg.log.type") {
 		return
 	}
