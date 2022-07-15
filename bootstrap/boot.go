@@ -30,4 +30,8 @@ func Initialize() {
 
 	// 启动 crontab
 	setupCrontab()
+
+	// 开启异步任务
+	setupQueueJob()
+
 }

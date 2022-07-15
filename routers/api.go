@@ -107,5 +107,9 @@ func apiExample(api *gin.RouterGroup) {
 
 		pagerCtrl := new(example_ctrl.PagerController)
 		exampleGroup.GET("/pager", pagerCtrl.Pager) // 数据分页演示
+
+		asyncQueueJobCtrl := new(example_ctrl.AsyncQueueJobController)
+		exampleGroup.GET("/job", asyncQueueJobCtrl.Job) // 投递异步任务
+
 	}
 }
