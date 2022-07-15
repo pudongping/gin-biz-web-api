@@ -27,7 +27,12 @@ func NewFooTask(params FooPayload) (*asynq.Task, error) {
 	if err != nil {
 		return nil, err
 	}
-	return asynq.NewTask(TypeFoo, payload, asynq.Queue(DefaultQueueName)), nil
+	return asynq.NewTask(
+		TypeFoo,
+		payload,
+		asynq.Queue(DefaultQueueName),
+		asynq.MaxRetry(3), // 任务执行失败后，最多重试 3 次
+	), nil
 }
 
 func HandFooTask(ctx context.Context, t *asynq.Task) error {
