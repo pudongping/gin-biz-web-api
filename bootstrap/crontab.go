@@ -29,22 +29,22 @@ func addScheduleTask() {
 
 	// @daily 或者 @midnight 每天 0 点执行清理日志
 	clearLogsCrontabEntryID, err := global.Crontab.AddJob("@daily", crontabTask.ClearLogsCrontab{})
-	ifError(err, int(clearLogsCrontabEntryID))
+	ifError(err, int(clearLogsCrontabEntryID), "ClearLogsCrontab")
 
 }
 
-func ifError(err error, entryID int) {
+func ifError(err error, entryID int, taskName string) {
 	if err != nil {
 		logger.Error(
 			"加入定时任务失败：",
-			zap.String("task", "ClearLogsCrontab"),
+			zap.String("task", taskName),
 			zap.Int("entryID", entryID),
 			zap.Error(err),
 		)
 	} else {
 		logger.Info(
 			"加入定时任务成功：",
-			zap.String("task", "ClearLogsCrontab"),
+			zap.String("task", taskName),
 			zap.Int("entryID", entryID),
 		)
 	}
