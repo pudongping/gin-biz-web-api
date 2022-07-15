@@ -7,6 +7,7 @@
 - cmd —— 命令行  
 - config —— 配置文件目录
 - constant —— 常量目录  
+- crontab —— 计划任务目录  
 - docs —— 项目文档相关目录
 - etc —— 配置文件  
 - global —— 全局变量
@@ -16,6 +17,7 @@
     - middleware —— HTTP 中间件
     - requests —— 验证器
     - service —— 项目核心业务逻辑层
+- job —— 异步任务目录
 - model —— 模型层
 - pkg —— 项目相关的模块包
 - public —— 静态资源目录  
@@ -101,6 +103,8 @@ make build-local
 - [juju/ratelimit](https://github.com/juju/ratelimit) —— 令牌桶限流器
 - [shirou/gopsutil](https://github.com/shirou/gopsutil) —— 查看系统信息
 - [fsnotify/fsnotify](https://github.com/fsnotify/fsnotify) —— 配置热更新
+- [robfig/cron](https://github.com/robfig/cron) —— 定时计划任务
+- [hibiken/asynq](https://github.com/hibiken/asynq) —— 异步队列
 
 ## 其他
 
@@ -193,12 +197,14 @@ cache | 缓存
 captcha | 图片验证码
 config | 配置
 console | 控制台打印工具
+crontab | 定时任务
 database | 数据库
 email | 邮件工具
 errcode | 自定义错误码
 file | 文件操作
 hash | hash 处理
 helper | 助手函数
+job | 异步队列任务
 jwt | JWT 授权验证
 limiter | 接口访问频率控制
 logger | 日志操作
@@ -213,7 +219,10 @@ verifycode | 验证码工具
 
 > 接口请求示例，可查看 `routers/api.go` 文件，多数功能都有示例接口。
 
+- [异步队列任务](https://github.com/pudongping/gin-biz-web-api/blob/main/docs/guide/async_queue_job.md)
 - [缓存](https://github.com/pudongping/gin-biz-web-api/blob/main/docs/guide/cache.md)
+- [定时任务](https://github.com/pudongping/gin-biz-web-api/blob/main/docs/guide/crontab.md)
+- [项目部署](https://github.com/pudongping/gin-biz-web-api/blob/main/docs/guide/deploy.md)
 - [邮件](https://github.com/pudongping/gin-biz-web-api/blob/main/docs/guide/email.md)
 - [日志](https://github.com/pudongping/gin-biz-web-api/blob/main/docs/guide/log.md)
 - [redis](https://github.com/pudongping/gin-biz-web-api/blob/main/docs/guide/redis.md)
