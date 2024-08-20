@@ -7,12 +7,15 @@ import (
 	"runtime"
 	"strings"
 
-	"github.com/spf13/cobra"
-
 	"gin-biz-web-api/bootstrap"
 	"gin-biz-web-api/cmd"
 	"gin-biz-web-api/global"
 	"gin-biz-web-api/pkg/console"
+	"gin-biz-web-api/pkg/database"
+	"gin-biz-web-api/pkg/redis"
+
+	"github.com/spf13/cobra"
+	"go.uber.org/zap"
 )
 
 var (
@@ -41,16 +44,15 @@ func main() {
 	// 设置项目根目录
 	global.RootPath = getRootPath()
 
-	// 启动服务
-	run()
-
-}
-
-// run 启动服务
-func run() {
-
 	// 注册全局参数
 	cmd.RegisterGlobalFlags(rootCmd)
+
+	// 在程序结束时，确保日志缓冲区中的所有日志都被写入
+	defer zap.L().Sync()
+	// 关闭数据库连接
+	defer database.Close()
+	// 关闭 redis 连接
+	defer redis.Close()
 
 	// 注册子命令
 	registerChildrenCmd()

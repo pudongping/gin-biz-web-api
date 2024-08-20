@@ -5,6 +5,7 @@ import (
 	"sync"
 	"time"
 
+	"go.uber.org/zap"
 	"gorm.io/gorm"
 	gormLogger "gorm.io/gorm/logger"
 
@@ -92,6 +93,15 @@ func NewMysqlClient(dbConfig gorm.Dialector, lg gormLogger.Interface) *MySQLClie
 	console.ExitIf(err)
 
 	return mysql
+}
+
+// Close 关闭所有数据库连接
+func Close() {
+	for group, mysql := range mysqlCollections {
+		if err := mysql.SQLDB.Close(); err != nil {
+			zap.L().Error("MySQL", zap.String("group", group), zap.Error(err))
+		}
+	}
 }
 
 func setSimpleHelper() {

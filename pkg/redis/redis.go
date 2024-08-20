@@ -92,6 +92,15 @@ func NewClient(address, username, password string, db int) *RdsClient {
 	return rds
 }
 
+// Close 关闭所有的 redis 连接
+func Close() {
+	for group, rds := range rdsCollections {
+		if err := rds.Client.Close(); err != nil {
+			logger.ErrorString("Redis", group+" Close", err.Error())
+		}
+	}
+}
+
 // Ping 用以测试 redis 连接是否正常
 func (r RdsClient) Ping() error {
 	_, err := r.Client.Ping(r.Context).Result()
