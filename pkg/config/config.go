@@ -30,7 +30,8 @@ func NewConfig(env string, configs ...string) {
 
 	// 配置类型，支持 "json", "toml", "yaml", "yml", "properties",
 	//              "props", "prop", "env", "dotenv"
-	vp.SetConfigType("yaml") // 设置配置文件的类型为 yaml
+	// 需要注意的是：这个配置基本上是配合远程配置中心使用的，比如 etcd、consul、zookeeper 等，告诉 viper 当前的数据使用什么格式去解析
+	// vp.SetConfigType("yaml")
 
 	// 设置环境变量前缀，比如有一个环境变量为：`ALEX_AGE=18` 那么可以通过 vp.Get("age") 或者 vp.Get("AGE") 进行读取
 	// vp.SetEnvPrefix("ALEX")
