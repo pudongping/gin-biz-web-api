@@ -22,6 +22,7 @@ func AuthJWT() gin.HandlerFunc {
 		// jwt 解析失败
 		if err != nil {
 			response.ToErrorResponse(errcode.BadRequest.WithDetails(err.Error()), err.Error())
+			c.Abort() // 终止后续中间件和处理函数的执行
 			return
 		}
 
@@ -30,6 +31,7 @@ func AuthJWT() gin.HandlerFunc {
 		database.DB.First(&user, claims.UserID)
 		if user.ID == 0 {
 			response.ToErrorResponse(errcode.Unauthorized, "找不到对应用户")
+			c.Abort()
 			return
 		}
 
@@ -37,6 +39,6 @@ func AuthJWT() gin.HandlerFunc {
 		c.Set("current_user_id", user.GetStringID())
 		c.Set("current_user_info", user)
 
-		c.Next()
+		c.Next() // 继续执行后续中间件和处理函数
 	}
 }

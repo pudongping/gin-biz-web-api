@@ -27,6 +27,7 @@ func LimitMethodTokenBucket(methodLimiters limiter.TokenBucketLimiterInterface, 
 			if count == 0 {
 				// 已经超额
 				responses.New(c).ToErrorResponse(errcode.TooManyRequests)
+				c.Abort()
 				return
 			}
 		}
