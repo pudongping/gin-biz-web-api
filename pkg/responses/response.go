@@ -18,6 +18,12 @@ type Response struct {
 	Ctx *gin.Context
 }
 
+type ResponseData struct {
+	Code int         `json:"code"` // 状态码
+	Msg  string      `json:"msg"`  // 错误信息
+	Data interface{} `json:"data"` // 数据
+}
+
 // New 实例化返回类
 func New(ctx *gin.Context) *Response {
 	return &Response{Ctx: ctx}
@@ -26,11 +32,15 @@ func New(ctx *gin.Context) *Response {
 // ToResponse 正确数据返回
 func (r *Response) ToResponse(data interface{}) {
 	code := errcode.Success
-	response := gin.H{"code": code.Code(), "msg": code.Msg()}
+	response := ResponseData{
+		Code: code.Code(),
+		Msg:  code.Msg(),
+		Data: nil,
+	}
 	if data == nil {
-		response["data"] = gin.H{}
+		response.Data = gin.H{}
 	} else {
-		response["data"] = data
+		response.Data = data
 	}
 
 	r.Ctx.JSON(http.StatusOK, response)
@@ -52,19 +62,19 @@ func (r *Response) ToErrorResponse(err error, messages ...string) {
 		e = customErr
 	}
 
-	response := gin.H{"code": e.Code(), "msg": e.Msg()}
+	response := ResponseData{
+		Code: e.Code(),
+		Msg:  e.Msg(),
+		Data: nil,
+	}
 
 	if len(messages) > 0 {
-		response["msg"] = messages[0]
+		response.Msg = messages[0]
 	}
 
 	details := e.Details()
-	if len(details) > 0 {
-		if r.isShowDetails() {
-			response["details"] = details
-		} else {
-			logger.ErrorJSON("ToErrorResponse", "details", details)
-		}
+	if len(details) > 0 && r.isShowDetails() {
+		logger.ErrorJSON("ToErrorResponse", "details", details)
 	}
 
 	if r.isShowDetails() && e.Err() != nil {
@@ -77,47 +87,23 @@ func (r *Response) ToErrorResponse(err error, messages ...string) {
 }
 
 // ToErrorValidateResponse 验证器验证不通过时，错误返回
-// 返回的 json 示例为：
-// {
-//    "code": 100422,
-//    "details": {
-//        "account": [
-//            "账号为必填项",
-//            "账号格式错误，只允许数字和英文",
-//            "账号长度需在 3~20 之间"
-//        ],
-//        "email": [
-//            "Email 为必填项",
-//            "Email 长度需大于 4",
-//            "Email 格式不正确，请提供有效的邮箱地址"
-//        ],
-//        "password": [
-//            "密码为必填项",
-//            "密码长度需大于 6"
-//        ],
-//        "password_confirm": [
-//            "确认密码框为必填项"
-//        ],
-//        "verify_code": [
-//            "验证码为必填",
-//            "验证码长度必须为 6 位的数字"
-//        ]
-//    },
-//    "msg": "验证码为必填"
-// }
 func (r *Response) ToErrorValidateResponse(err *errcode.Error, errors map[string][]string) {
-	response := gin.H{"code": err.Code(), "msg": err.Msg()}
+	response := ResponseData{
+		Code: err.Code(),
+		Msg:  err.Msg(),
+		Data: nil,
+	}
 
 	if len(errors) > 0 {
 		ks := mapx.SortAscKeyString(errors)
 
 		for _, k := range ks {
-			response["msg"] = errors[k][0]
+			response.Msg = errors[k][0]
 			break
 		}
 
 		if r.isShowDetails() {
-			response["details"] = errors
+			logger.ErrorJSON("ToErrorResponse", "details", errors)
 		}
 	}
 
