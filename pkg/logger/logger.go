@@ -119,7 +119,8 @@ func getLogWriter(filename string, maxSize, maxBackup, maxAge int, compress bool
 
 // Dump 方便调试时使用，会记录 warn 级别信息
 // eg1：只有一个参数时
-// 	logger.Dump(struct {
+//
+//	logger.Dump(struct {
 //		Name, Sex string
 //		Age       int32
 //	}{
@@ -130,7 +131,8 @@ func getLogWriter(filename string, maxSize, maxBackup, maxAge int, compress bool
 //
 // output：2022-03-18 01:18:19     WARN    cache/redis_driver.go:52        Dump    {"data": "{\"Name\":\"alex\",\"Sex\":\"m\",\"Age\":18}"}
 // eg2：有两个参数时
-// 	logger.Dump(struct {
+//
+//	logger.Dump(struct {
 //		Name, Sex string
 //		Age       int32
 //	}{
@@ -138,6 +140,7 @@ func getLogWriter(filename string, maxSize, maxBackup, maxAge int, compress bool
 //		Sex:  "m",
 //		Age:  18,
 //	}, "个人信息")
+//
 // output：2022-03-18 01:20:43     WARN    cache/redis_driver.go:52        Dump    {"个人信息": "{\"Name\":\"alex\",\"Sex\":\"m\",\"Age\":18}"}
 func Dump(value interface{}, msg ...string) {
 	valueString := jsonString(value)
@@ -260,7 +263,8 @@ func FatalString(moduleName, name, msg string) {
 // output：2022-03-18 00:52:32     DEBUG   cache/redis_driver.go:51        Cache   {"Flush": "{\"boys\":[\"alex\",\"bob\"],\"sex\":[\"f\",\"m\"]}"}
 //
 // eg2：
-// 	logger.DebugJSON("Cache", "Flush", struct {
+//
+//	logger.DebugJSON("Cache", "Flush", struct {
 //		Name, Sex string
 //		Age       int32
 //	}{
@@ -268,6 +272,7 @@ func FatalString(moduleName, name, msg string) {
 //		Sex:  "m",
 //		Age:  18,
 //	})
+//
 // output：2022-03-18 01:10:10     DEBUG   cache/redis_driver.go:52        Cache   {"Flush": "{\"Name\":\"alex\",\"Sex\":\"m\",\"Age\":18}"}
 func DebugJSON(moduleName, name string, value interface{}) {
 	Logger.Debug(moduleName, zap.String(name, jsonString(value)))

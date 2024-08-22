@@ -1,6 +1,7 @@
 // 集合
 // 使用示例：
-// 	s := make(Set)
+//
+//	s := make(Set)
 //	s.Add("Alex")
 //	s.Add("Harry")
 //	fmt.Println(s.Has("Alex")) ==> true

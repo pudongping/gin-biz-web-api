@@ -3,22 +3,19 @@ module gin-biz-web-api
 go 1.16
 
 require (
-	github.com/davecgh/go-spew v1.1.1
 	github.com/disintegration/imaging v1.6.2
 	github.com/fsnotify/fsnotify v1.5.1
 	github.com/gertd/go-pluralize v0.2.0
 	github.com/gin-gonic/gin v1.7.7
-	github.com/go-redis/redis/v7 v7.4.0 // indirect
 	github.com/go-redis/redis/v8 v8.11.5
 	github.com/golang-jwt/jwt v3.2.2+incompatible
 	github.com/google/uuid v1.3.0 // indirect
-	github.com/hibiken/asynq v0.23.0 // indirect
+	github.com/hibiken/asynq v0.23.0
 	github.com/iancoleman/strcase v0.2.0
 	github.com/juju/ratelimit v1.0.1
-	github.com/kr/pretty v0.3.0 // indirect
 	github.com/mojocn/base64Captcha v1.3.5
-	github.com/pkg/errors v0.9.1 // indirect
-	github.com/robfig/cron/v3 v3.0.1 // indirect
+	github.com/pkg/errors v0.9.1
+	github.com/robfig/cron/v3 v3.0.1
 	github.com/rogpeppe/go-internal v1.8.0 // indirect
 	github.com/shirou/gopsutil v3.21.11+incompatible
 	github.com/spf13/cast v1.5.0
