@@ -1,6 +1,8 @@
 # gin-biz-web-api
 基于 gin 框架封装的业务 web api 脚手架，可直接拿过来上手开发业务逻辑代码。
 
+此项目不论是自己学习还是直接做功能开发，都是一个不错的选择，项目中集成了很多开箱即用的功能，比如：日志、缓存、邮件、异步队列、定时任务、接口频率限流、JWT 认证、图片验证码、分页、配置文件、数据库操作等等。
+
 ## 关于项目目录
 
 - bootstrap —— 包初始化
@@ -29,30 +31,50 @@
 
 ## 运行项目
 
-> 本人开发时本地环境：`go version go1.16.3 darwin/amd64`
+### 快速体验
 
-- 下载项目
+只需 2 步，即可运行当前项目。前提是你本地已经安装了 docker。
+
+1. 下载项目
 
 ```shell
-git clone https://github.com/pudongping/gin-biz-web-api.git
+git clone https://github.com/pudongping/gin-biz-web-api.git gin-biz-web-api
 ```
 
-- 下载项目相关依赖
+2. 运行项目
+
+```shell
+cd gin-biz-web-api && make dc-run
+```
+
+仅需以上 2 步，即可运行当前项目，访问 `http://127.0.0.1:8501/api/test` 即可看到返回的数据。
+
+### 本地运行
+
+> 本人开发时本地环境：`go version go1.16.3 darwin/amd64`
+
+1. 下载项目
+
+```shell
+git clone https://github.com/pudongping/gin-biz-web-api.git gin-biz-web-api
+```
+
+2. 下载项目相关依赖
 
 > 此项目使用 `Go Modules` 进行依赖包管理，请注意首先得开启 `Go Modules`
 
 ```shell
-cd <your-path>/gin-biz-web-api && go mod tidy
+cd gin-biz-web-api && go mod tidy
 ```
 
-- 修改配置
+3. 修改配置
 
 将根目录下的 `/etc/config.yaml.example` 配置文件复制成 `/etc/config.yaml` 然后将 `/etc/config.yaml` 文件中的配置信息修改成你自己的配置。
 如果启动项目时设置了 `--env` 参数，那么则会走对应的环境配置信息。  
 比如启动项目时，执行了 `go run main.go --env=prod` 命令，那么则会使用 `/etc/prod_config.yaml` 文件中的配置信息，如果对应文件不存在，请  
 将 `cp ./etc/config.yaml ./etc/prod_config.yaml` 复制一份。
 
-- 启动项目
+4. 启动项目
 
 ```shell
 go run main.go
@@ -63,7 +85,7 @@ go run main.go
 - 将编译信息写入二进制文件中
 
 ```shell
-# 本地编译打包，在项目根目录下执行
+# 本地编译打包，在项目根目录下执行（更多命令，可直接在项目根目录下执行 `make help` 命令进行查看 ）
 make build-local
 ```
 
@@ -78,6 +100,34 @@ make build-local
 # Build Go Version: go version go1.16.3 darwin/amd64
 # Build Git Commit Hash ID: 5f112956c4c51c763f46a35eff3e767ead53abe4
 ```
+
+## 开箱即用的功能包
+
+| 包          | 功能          |
+|------------|-------------|
+| app        | 和系统相关的方法    |
+| auth       | 授权          |
+| cache      | 缓存          |
+| captcha    | 图片验证码       |
+| config     | 配置          |
+| console    | 控制台打印工具     |
+| crontab    | 定时任务        |
+| database   | 数据库         |
+| email      | 邮件工具        |
+| errcode    | 自定义错误码      |
+| file       | 文件操作        |
+| hash       | hash 处理     |
+| helper     | 助手函数        |
+| job        | 异步队列任务      |
+| jwt        | JWT 授权验证    |
+| limiter    | 接口访问频率控制    |
+| logger     | 日志操作        |
+| paginator  | 分页处理        |
+| redis      | redis 缓存操作  |
+| responses  | 统一数据返回      |
+| upload     | 文件上传        |
+| validator  | 验证器         |
+| verifycode | 验证码工具       |
 
 ## 第三方依赖
 
@@ -149,7 +199,7 @@ go run main.go -p=8081
 
 ## 命令行
 
-本项目使用 cobra 命令行启动 http web 服务，执行 `go run main.go` 其实默认执行了 `go run main.go server` 命令。
+本项目使用 `cobra` 命令行启动 http web 服务，执行 `go run main.go` 其实默认就是执行了 `go run main.go server` 命令。
 
 ### 目前支持的命令
 
@@ -187,37 +237,9 @@ go run main.go server | 启动 http 服务 | go run main.go server
 --- | --- | ---
 go run main.go make model * | 将 mysql 数据表生成对应的结构体 | go run main.go make model users
 
-## 自定义包
-
-包 | 用处
---- | ---
-app | 和系统相关的方法
-auth | 授权
-cache | 缓存
-captcha | 图片验证码
-config | 配置
-console | 控制台打印工具
-crontab | 定时任务
-database | 数据库
-email | 邮件工具
-errcode | 自定义错误码
-file | 文件操作
-hash | hash 处理
-helper | 助手函数
-job | 异步队列任务
-jwt | JWT 授权验证
-limiter | 接口访问频率控制
-logger | 日志操作
-paginator | 分页处理
-redis | redis 缓存操作
-responses | 统一数据返回
-upload | 文件上传
-validator | 验证器
-verifycode | 验证码工具
-
 ## 文档
 
-> 接口请求示例，可查看 `routers/api.go` 文件，多数功能都有示例接口。
+> 接口请求示例，可查看 `routers/api.go` 文件，多数功能都有示例接口，可直接调用查看。
 
 - [异步队列任务](https://github.com/pudongping/gin-biz-web-api/blob/main/docs/guide/async_queue_job.md)
 - [缓存](https://github.com/pudongping/gin-biz-web-api/blob/main/docs/guide/cache.md)
@@ -227,3 +249,11 @@ verifycode | 验证码工具
 - [日志](https://github.com/pudongping/gin-biz-web-api/blob/main/docs/guide/log.md)
 - [redis](https://github.com/pudongping/gin-biz-web-api/blob/main/docs/guide/redis.md)
 - [接口示例，带分页功能](https://github.com/pudongping/gin-biz-web-api/blob/main/docs/guide/document.md)
+
+## 最后
+
+如果你觉得这个项目对你有帮助，欢迎给个 star，支持一下。
+
+## License
+
+MIT

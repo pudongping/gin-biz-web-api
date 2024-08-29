@@ -1,5 +1,5 @@
 # 这一行的意义在于告诉 make 命令，以下的命令都是伪命令，不是真正的文件名，这样即使存在同名的文件， make 命令也不会因为找到文件而不执行命令，依然会去执行这个目标下的命令。
-.PHONY: help all build build-linux build-windows build-darwin version clean gotool
+.PHONY: help all build build-linux build-windows build-darwin version clean gotool dc-rebuild dc-run
 
 AppName=gin-biz-web-api
 # 打包时的软件版本号
@@ -26,6 +26,8 @@ help:
 	@echo "  version        : Show the version of this project."
 	@echo "  clean          : Remove all binary file of this project."
 	@echo "  gotool         : Run go tool fmt and vet."
+	@echo "  dc-rebuild     : Rebuild the docker container."
+	@echo "  dc-run         : Run the docker container."
 
 # 打包全部环境
 # 相当于分别执行 make build 、make build-linux 、make build-windows 、make build-darwin
@@ -78,3 +80,13 @@ gotool:
 	go fmt ./...
 	go vet ./...
 	@echo "\033[32mSuccess!\033[0m"
+
+dc-rebuild:
+	@echo "\033[34mRebuild the docker container ...\033[0m"
+	docker-compose down
+	docker-compose build --no-cache
+	docker-compose up -d
+
+dc-run:
+	@echo "\033[34mRun the docker container ...\033[0m"
+	docker-compose up

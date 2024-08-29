@@ -1,0 +1,28 @@
+
+FROM golang:1.16.3-alpine as builder
+
+ENV GO111MODULE=on GOPROXY=https://goproxy.cn,https://goproxy.io,direct
+
+WORKDIR /go-project
+
+COPY . .
+
+RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g' /etc/apk/repositories \
+    && apk --no-cache add git curl bash tzdata \
+    # set China timezone
+    && cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
+    && echo "Asia/Shanghai" >  /etc/timezone \
+    && apk del tzdata \
+    # && echo "machine <you-private-website-url> login <your-private-website-account> password <your-private-website-password>" > ~/.netrc  \
+    && go mod tidy \
+    && chmod +x ./entryPoint.sh
+
+EXPOSE 8501
+
+ENTRYPOINT ["/go-project/entryPoint.sh"]
+
+# 在项目根目录下执行一下命令创建镜像
+# 指定 Dockerfile 文件路径为当前目录下的 Dockerfile1 文件，且镜像名称为 go-project:v1.0.0
+# docker build -f ./Dockerfile1 -t go-project:v1.0.0 .
+# 运行镜像
+# docker run -d -p 8501:8501 go-project:v1.0.0

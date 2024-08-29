@@ -17,12 +17,6 @@ type User struct {
 	Phone string `gorm:"column:phone;unique;" json:"phone"`
 	// 密码    varchar(255) is_nullable: NO
 	Password string `gorm:"column:password;" json:"password"`
-	// 省份    varchar(20) is_nullable: NO
-	Province string `gorm:"column:province;" json:"province"`
-	// 市区    varchar(40) is_nullable: NO
-	City string `gorm:"column:city;" json:"city"`
-	// 区县    varchar(255) is_nullable: NO
-	Country string `gorm:"column:country;" json:"country"`
 	// 昵称   MUL varchar(255) is_nullable: NO
 	Nickname string `gorm:"column:nickname;" json:"nickname"`
 	// 自我简介    text is_nullable: YES

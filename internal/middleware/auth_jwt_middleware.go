@@ -2,6 +2,8 @@
 package middleware
 
 import (
+	"gin-biz-web-api/constant"
+
 	"github.com/gin-gonic/gin"
 
 	"gin-biz-web-api/model"
@@ -36,8 +38,8 @@ func AuthJWT() gin.HandlerFunc {
 		}
 
 		// 将用户信息存入 gin.context 上下文中，方便后续直接从上下文中拿到用户信息
-		c.Set("current_user_id", user.GetStringID())
-		c.Set("current_user_info", user)
+		c.Set(constant.CurrentUserID, user.GetStringID())
+		c.Set(constant.CurrentUserInfo, user)
 
 		c.Next() // 继续执行后续中间件和处理函数
 	}

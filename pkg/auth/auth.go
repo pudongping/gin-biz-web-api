@@ -2,6 +2,8 @@
 package auth
 
 import (
+	"gin-biz-web-api/constant"
+
 	"github.com/pkg/errors"
 
 	"github.com/gin-gonic/gin"
@@ -13,7 +15,7 @@ import (
 
 // CurrentUser 从 gin.context 中获取当前登录的用户信息
 func CurrentUser(c *gin.Context) model.User {
-	user, ok := c.MustGet("current_user_info").(model.User)
+	user, ok := c.MustGet(constant.CurrentUserInfo).(model.User)
 	if !ok {
 		logger.LogErrorIf(errors.New("无法获取当前用户信息"))
 		return model.User{}
@@ -24,5 +26,5 @@ func CurrentUser(c *gin.Context) model.User {
 
 // CurrentUserID 从 gin.context 中获取当前登录的用户 ID
 func CurrentUserID(c *gin.Context) uint {
-	return cast.ToUint(c.MustGet("current_user_id"))
+	return cast.ToUint(c.MustGet(constant.CurrentUserID))
 }

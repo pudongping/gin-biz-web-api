@@ -8,6 +8,8 @@ App:
   ContextTimeout: 60 # 上下文超时时间，单位：s
 Log:
   Type: daily
+  MaxAge: 7
+  MaxSize: 64
 JWT:
   Key: zBqYyQrPNaIUsnRhsGtHLivjqiMjBVLS # 加密 key
   ExpireTime: 120 # jwt 过期时间，单位：min
@@ -21,21 +23,28 @@ Email:
   FromName: alex
 DB:
   Driver: mysql
-  Host: 127.0.0.1
+  Host: mysql8_0_19
   Port: 3306
   Database: gin_biz_web_api
   Username: root
   Password: 123456
   Charset: utf8mb4
 Redis: # redis 相关配置
-  Host: 127.0.0.1
+  Host: redis_6_2_6
   Port: 6379
   Username:
   Password:
   DB: 0
 Cache: # 缓存相关配置，默认使用的也是 redis 驱动
-  Host: 127.0.0.1
+  Host: redis_6_2_6
   Port: 6379
   Username:
   Password:
   DB: 1 # 建议将缓存存储位置和业务 redis 存储位置区分开来
+QueueJob:
+  Redis:
+    Host: redis_6_2_6
+    Port: 6379
+    Username:
+    Password:
+    DB: 2

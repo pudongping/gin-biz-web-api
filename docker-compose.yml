@@ -1,0 +1,25 @@
+services:
+  mysql8_0_19:
+    image: "mysql:8.0.19"
+    ports:
+      - "33061:3306"
+    command: "--default-authentication-plugin=mysql_native_password --init-file /data/apps/init.sql"
+    environment:
+      MYSQL_ROOT_PASSWORD: "123456"
+    volumes:
+      - ./init.sql:/data/apps/init.sql
+  redis_6_2_6:
+    image: "redis:6.2.6"
+    ports:
+      - "63791:6379"
+  web_app:
+    build: .
+    volumes:
+      - ./storage:/go-project-run/storage
+    command: sh -c "./wait-for.sh mysql8_0_19:3306 redis_6_2_6:6379 -t 60 -- ./gin-biz-web-api -c=./etc/"
+#    command: sh -c "./gin-biz-web-api -c=./etc/"
+    depends_on:
+      - mysql8_0_19
+      - redis_6_2_6
+    ports:
+      - "8501:8501"

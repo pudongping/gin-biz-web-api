@@ -106,7 +106,7 @@ func apiExample(api *gin.RouterGroup) {
 		exampleGroup.POST("/upload-avatar", uploadCtrl.UploadAvatar) // 上传用户头像
 
 		pagerCtrl := new(example_ctrl.PagerController)
-		exampleGroup.GET("/pager", pagerCtrl.Pager) // 数据分页演示
+		exampleGroup.GET("/pager", pagerCtrl.Pager) // 数据分页演示（仅作代码演示，实际数据表不存在）
 
 		asyncQueueJobCtrl := new(example_ctrl.AsyncQueueJobController)
 		exampleGroup.GET("/job", asyncQueueJobCtrl.Job) // 投递异步任务

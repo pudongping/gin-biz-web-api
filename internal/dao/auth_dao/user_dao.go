@@ -13,6 +13,6 @@ func NewUserDao() *UserDao {
 }
 
 func (d *UserDao) GetUsers() (users []model.User, count int64) {
-	database.DB.Where("id >= ?", 3).Find(&users).Count(&count)
+	database.DB.Where("id >= ?", 0).Find(&users).Count(&count)
 	return
 }
